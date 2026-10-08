@@ -22,3 +22,131 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+
+# =========================
+# LaTeX auxiliary files
+# =========================
+
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.xdv
+
+# =========================
+# Bibliography
+# =========================
+
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.bib.bak
+
+# =========================
+# Indexing / glossaries
+# =========================
+
+*.idx
+*.ilg
+*.ind
+*.ist
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+
+# =========================
+# Beamer
+# =========================
+
+*.nav
+*.snm
+*.vrb
+
+# =========================
+# LaTeX build directories
+# =========================
+
+_build/
+build/
+out/
+
+# =========================
+# minted / Pygments
+# =========================
+
+_minted-*/
+*.pyg
+
+# =========================
+# LaTeX editor / preview files
+# =========================
+
+*.bak
+*.swp
+*.swo
+*~
+.#*
+*.pdf
+
+# =========================
+# OS-generated files
+# =========================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# LaTeX BUILD FILES
+
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.gz
+*.synctex.gz
+*.idx
+*.ilg
+*.ind
+
+# PDF OUTPUT
+*.pdf
+
+# LaTeXmk
+
+*.run.xml
+
+# TEMPORARY FILES
+
+*.nav
+*.snm
+*.vrb
+
+# OS FILES
+
+.DS_Store
+Thumbs.db
