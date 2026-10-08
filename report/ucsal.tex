@@ -1,0 +1,87 @@
+\documentclass[12pt,oneside,a4paper,article]{abntex2}
+\usepackage[utf8]{inputenc} % Codificação do documento
+\usepackage[T1]{fontenc}    % Seleção de código de fonte.
+\usepackage[brazil]{babel}  % Idioma do documento
+\usepackage{graphicx}       % Inclusão de gráficos
+\usepackage{tabularx}       % Tabelas avançadas
+\usepackage{amsmath}        % Melhorias em matemática
+\usepackage{lipsum}         % Geração de texto dummy
+\usepackage{authblk}
+\usepackage[num]{abntex2cite} % ou use [num] para citações numéricas
+\usepackage[left=3cm,right=2cm,top=3cm,bottom=2cm]{geometry} % Margens
+\usepackage{setspace}       % Espaçamento entre linhas
+\usepackage{hyperref} % para inserir links
+
+\title{\textbf{Software livre e Ferramentas Open Source}}
+\author[1]{Pedro Henrique DOliveira\thanks{pedrohf.oliveira@ucsal.edu.br}}
+\author[1]{Guilherme Brito\thanks{⁠guilhermearaujo.brito@ucsal.edu.br}}
+\author[1]{Carlito Neto\thanks{carlito.neto@ucsal.edu.br}}
+\author[1]{Fernando Chagas\thanks{fernandochagas.santos@ucsal.edu.br}}
+
+\affil[1]{UCSal, Engenharia de Software, Bahia, Brasil}
+
+\date{Março 2026}
+
+\ifthenelse{\equal{\ABNTEXisarticle}{true}}{%
+\renewcommand{\maketitlehookb}{}
+}{}
+
+ \hypersetup{
+colorlinks=false,       % false: boxed links; true: colored links
+pdfborder={0 0 0},      % remove as bordas ao redor dos links
+}
+
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\renewcommand*{\Affilfont}{\normalsize\normalfont}
+\renewcommand*{\Authfont}{\bfseries}    % make author names boldface    
+\setlength{\affilsep}{2em}   % set the space between author and affiliation
+\newsavebox\affbox
+
+\begin{document}
+
+\input{introduction}
+\input{development}
+\input{conclusion}
+\input{resume}
+\input{questions}
+
+\begin{center}
+    \includegraphics[width=0.3\textwidth]{ucsal_logo.png} 
+\end{center}
+
+{\let\newpage\relax\maketitle}
+
+\begin{resumoumacoluna}
+\resume
+\par\vspace{\baselineskip}
+\raggedright
+\textbf{Palavras-chaves}: software open source, software open source definitions, open source tools, open source tools definition.
+\end{resumoumacoluna}
+
+\textual
+
+\section{Introdução}
+\subsection{Software Livre e Ferramentas Open Source}
+\softwareDefinition
+\subsection{Importância}
+\openSourceToolsDefinition
+
+
+\section{Desenvolvimento}
+\subsection{Principios do Software Livre}
+\developmentIntroduction
+\subsection{Contexto Atual}
+\openSourceCorrelation
+\subsection{Infraestrutura Global}
+\globalInfrastructure
+
+\section{Conclusão}
+\conclusion
+
+\section{Perguntas Sobre o Tema}
+\questions
+
+\bibliography{references} 
+\end{document}
