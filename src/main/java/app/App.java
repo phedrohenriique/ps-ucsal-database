@@ -1,6 +1,5 @@
 package app;
 
-
 // $ choco install maven ( for windows users )
 // go to scrapper/app-java
 // run script with
@@ -8,15 +7,30 @@ package app;
 // $ java -cp target/classes App
 // to run directly
 // mvn compile exec:java
+// mvn clean compile exec:java
+// mvn dependency:tree - check for maven dependencies
 
+import java.sql.SQLException;
+
+import app.configuration.Configuration;
 import app.services.Database;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
 
-        Database database = new Database();
-
         System.out.println("STARTING APP");
+
+        Configuration configuration = new Configuration();
+        Database database = new Database(configuration);
+        try {
+            
+            database.accessDatabase();
+
+        } catch (SQLException exception) {
+
+            System.err.println("DATABASE CONNECTION FAILED : " + exception.getMessage());
+        }
+
     }
 }

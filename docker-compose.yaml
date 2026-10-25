@@ -7,9 +7,9 @@ services:
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_URL}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
     ports:
-      - "5433:5432" # host_machine/container 5434 on my machine ---> on my container
+      - "5433:5432" # host_machine/container - port 5433 running machine ---> port 5432 container
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

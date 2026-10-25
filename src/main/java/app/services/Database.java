@@ -1,26 +1,29 @@
-
 package app.services;
-import io.github.cdimascio.dotenv.Dotenv;
 
-class Config {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    public void getEnv() {
-        Dotenv dotenv = Dotenv.load();
-
-        // String dbUser = dotenv.get("DB_USER");
-        // String dbPassword = dotenv.get("DB_PASSWORD");
-        String dbUrl = dotenv.get("DB_URL");
-        System.out.println("URL : " + dbUrl);
-    }
-
-}
+import app.configuration.Configuration;
 
 public class Database {
 
-    public Database() {
+    private final Configuration configuration;
 
-        Config config = new Config();
-        config.getEnv();
+    public Database(Configuration configuration) {
+
+        this.configuration = configuration;
+    }
+
+    public void accessDatabase() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(
+            this.configuration.getDbUrl(),
+            this.configuration.getDbUser(),
+            this.configuration.getDbPassword()
+        )) {
+
+            System.out.println("DATABASE CONNECTION SUCCESSFUL");
+        }
     }
 
 }
