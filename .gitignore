@@ -289,4 +289,6 @@ Thumbs.db
 # java ignore
 
 */target
+target*
 */build
+build*

@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    container_name: db
+    restart: always
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_URL}
+    ports:
+      - "5433:5432" # host_machine/container 5434 on my machine ---> on my container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
