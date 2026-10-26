@@ -35,10 +35,10 @@ public class Database {
                         this.configuration.getDbPassword()
                 ); Statement stmt = connection.createStatement()) {
 
-                    DataSQL tableCreation = new DataSQL();
-                    String plantsTableSQL = tableCreation.createTablePlantsSQL();
-                    String devicesTableSQL = tableCreation.createTableDevicesSQL();
-                    String dataTableSQL = tableCreation.createTableDataSQL();
+                    DataSQL dataSQL = new DataSQL();
+                    String plantsTableSQL = dataSQL.createTablePlantsSQL();
+                    String devicesTableSQL = dataSQL.createTableDevicesSQL();
+                    String dataTableSQL = dataSQL.createTableDataSQL();
 
                     stmt.executeUpdate(plantsTableSQL);
                     System.out.println("TABLE - Plants CREATED");
@@ -54,5 +54,64 @@ public class Database {
                     System.out.println("ERROR CRETING TABLES : " + exception.getMessage());
                 }
     }
+
+    public void generateDataPlants() throws SQLException {
+        try (
+            Connection connection = DriverManager.getConnection(
+                    this.configuration.getDbUrl(),
+                    this.configuration.getDbUser(),
+                    this.configuration.getDbPassword()
+            ); Statement stmt = connection.createStatement()) {
+
+                DataSQL dataSQL = new DataSQL();
+                String generatePlantsData = dataSQL.generatePlantsData();
+
+                stmt.executeUpdate(generatePlantsData);
+                System.out.println("DATA INSERT TABLE - Plants");
+
+            } catch (SQLException exception) {
+
+                System.out.println("ERROR INSERT IN TABLE - Plants : " + exception.getMessage());
+            }
+    }
+
+    public void generateDataDevices() throws SQLException {
+        try (
+            Connection connection = DriverManager.getConnection(
+                    this.configuration.getDbUrl(),
+                    this.configuration.getDbUser(),
+                    this.configuration.getDbPassword()
+            ); Statement stmt = connection.createStatement()) {
+
+                DataSQL dataSQL = new DataSQL();
+                String generateDevicesData = dataSQL.generateDevicesData();
+
+                stmt.executeUpdate(generateDevicesData);
+                System.out.println("DATA INSERT TABLE - Devices");
+
+            } catch (SQLException exception) {
+
+                System.out.println("ERROR INSERT IN TABLE - Devices : " + exception.getMessage());
+            }
+    }
+
+    // public void generateDataRows() throws SQLException {
+    //     try (
+    //         Connection connection = DriverManager.getConnection(
+    //                 this.configuration.getDbUrl(),
+    //                 this.configuration.getDbUser(),
+    //                 this.configuration.getDbPassword()
+    //         ); Statement stmt = connection.createStatement()) {
+
+    //             DataSQL dataSQL = new DataSQL();
+
+    //             stmt.executeUpdate(dataTableSQL);
+    //             System.out.println("TABLE - Data CREATED");
+
+    //         } catch (SQLException exception) {
+
+    //             System.out.println("ERROR CRETING TABLES : " + exception.getMessage());
+    //         }
+    // }
 
 }

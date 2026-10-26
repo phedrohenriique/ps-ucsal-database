@@ -14,7 +14,6 @@ import java.sql.SQLException;
 
 import app.configuration.Configuration;
 import app.services.Database;
-import app.services.UI;
 
 public class App {
 
@@ -28,14 +27,17 @@ public class App {
 
             database.accessDatabase();
             database.createDatabaseTables();
+            database.generateDataPlants();
+            database.generateDataDevices();
+
 
         } catch (SQLException exception) {
 
             System.err.println("APP ERROR : " + exception.getMessage());
         }
 
-        UI ui = new UI();
-        ui.runUI();
+        // UI ui = new UI();
+        // ui.runUI();
 
     }
 
