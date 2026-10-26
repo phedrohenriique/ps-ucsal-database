@@ -41,17 +41,17 @@ public class Database {
                     String dataTableSQL = dataSQL.createTableDataSQL();
 
                     stmt.executeUpdate(plantsTableSQL);
-                    System.out.println("TABLE - Plants CREATED");
+                    System.out.println("TABLE CREATED - plants");
 
                     stmt.executeUpdate(devicesTableSQL);
-                    System.out.println("TABLE - Devices CREATED");
+                    System.out.println("TABLE CREATED - devices");
 
                     stmt.executeUpdate(dataTableSQL);
-                    System.out.println("TABLE - Data CREATED");
+                    System.out.println("TABLE CREATED - data");
 
                 } catch (SQLException exception) {
 
-                    System.out.println("ERROR CRETING TABLES : " + exception.getMessage());
+                    System.out.println("ERROR CREATING TABLES : " + exception.getMessage());
                 }
     }
 
@@ -67,11 +67,11 @@ public class Database {
                 String generatePlantsData = dataSQL.generatePlantsData();
 
                 stmt.executeUpdate(generatePlantsData);
-                System.out.println("DATA INSERT TABLE - Plants");
+                System.out.println("SUCCESS INSERT TABLE - plants");
 
             } catch (SQLException exception) {
 
-                System.out.println("ERROR INSERT IN TABLE - Plants : " + exception.getMessage());
+                System.out.println("ERROR INSERT IN TABLE - plants : " + exception.getMessage());
             }
     }
 
@@ -87,11 +87,11 @@ public class Database {
                 String generateDevicesData = dataSQL.generateDevicesData();
 
                 stmt.executeUpdate(generateDevicesData);
-                System.out.println("DATA INSERT TABLE - Devices");
+                System.out.println("SUCCESS INSERT TABLE - devices");
 
             } catch (SQLException exception) {
 
-                System.out.println("ERROR INSERT IN TABLE - Devices : " + exception.getMessage());
+                System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
             }
     }
 
