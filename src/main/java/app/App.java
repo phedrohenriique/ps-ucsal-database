@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 import app.configuration.Configuration;
 import app.services.Database;
+import app.services.UI;
 
 public class App {
 
@@ -24,14 +25,18 @@ public class App {
         Configuration configuration = new Configuration();
         Database database = new Database(configuration);
         try {
-            
+
             database.accessDatabase();
             database.createDatabaseTables();
 
         } catch (SQLException exception) {
 
-            System.err.println("DATABASE CONNECTION FAILED : " + exception.getMessage());
+            System.err.println("APP ERROR : " + exception.getMessage());
         }
 
+        UI ui = new UI();
+        ui.runUI();
+
     }
+
 }

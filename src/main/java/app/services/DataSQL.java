@@ -1,6 +1,6 @@
 package app.services;
 
-public class TableCreation {
+public class DataSQL {
 
     public enum Status {
         ACTIVE,
@@ -30,6 +30,7 @@ public class TableCreation {
                 id_plant INT NOT NULL,
                 name_device VARCHAR(100),
                 type_device VARCHAR(100),
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 status_device VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
                     CHECK (status_device IN (
                         'ACTIVE',

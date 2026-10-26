@@ -36,6 +36,26 @@
             <version>3.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.javelit</groupId>
+            <artifactId>javelit</artifactId>
+            <version>0.86.0</version>
+        </dependency>
+       
+        <!-- Optional: Add any other dependencies your app needs -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+       
+        <!-- Recommended: Add a logging implementation if you don't have one already -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+
     </dependencies>
 
     <build>

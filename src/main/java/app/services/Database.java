@@ -18,43 +18,41 @@ public class Database {
 
     public void accessDatabase() throws SQLException {
         try (Connection connection = DriverManager.getConnection(
-            this.configuration.getDbUrl(),
-            this.configuration.getDbUser(),
-            this.configuration.getDbPassword()
+                this.configuration.getDbUrl(),
+                this.configuration.getDbUser(),
+                this.configuration.getDbPassword()
         )) {
 
             System.out.println("DATABASE CONNECTION SUCCESSFUL");
         }
     }
 
-    public void createDatabaseTables() throws SQLException{
-        try(
-        Connection connection = DriverManager.getConnection(
-            this.configuration.getDbUrl(),
-            this.configuration.getDbUser(),
-            this.configuration.getDbPassword()
-        ); 
-        Statement stmt = connection.createStatement()) {
-            
-            TableCreation tableCreation = new TableCreation();
-            String plantsTableSQL = tableCreation.createTablePlantsSQL();
-            String devicesTableSQL = tableCreation.createTableDevicesSQL();
-            String dataTableSQL = tableCreation.createTableDataSQL();
+    public void createDatabaseTables() throws SQLException {
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); Statement stmt = connection.createStatement()) {
 
-            stmt.executeUpdate(plantsTableSQL);
-            System.out.println("TABLE - Plants CREATED");
+                    DataSQL tableCreation = new DataSQL();
+                    String plantsTableSQL = tableCreation.createTablePlantsSQL();
+                    String devicesTableSQL = tableCreation.createTableDevicesSQL();
+                    String dataTableSQL = tableCreation.createTableDataSQL();
 
-            stmt.executeUpdate(devicesTableSQL);
-            System.out.println("TABLE - Devices CREATED");
+                    stmt.executeUpdate(plantsTableSQL);
+                    System.out.println("TABLE - Plants CREATED");
 
-            stmt.executeUpdate(dataTableSQL);
-            System.out.println("TABLE - Data CREATED");
+                    stmt.executeUpdate(devicesTableSQL);
+                    System.out.println("TABLE - Devices CREATED");
 
-        
-    } catch (SQLException exception) {
+                    stmt.executeUpdate(dataTableSQL);
+                    System.out.println("TABLE - Data CREATED");
 
-        System.out.println("ERROR CRETING TABLES : "+ exception.getMessage());
-    }
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR CRETING TABLES : " + exception.getMessage());
+                }
     }
 
 }
