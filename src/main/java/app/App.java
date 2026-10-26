@@ -26,6 +26,7 @@ public class App {
         try {
             
             database.accessDatabase();
+            database.createDatabaseTables();
 
         } catch (SQLException exception) {
 
