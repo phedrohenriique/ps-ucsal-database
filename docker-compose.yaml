@@ -12,6 +12,7 @@ services:
       - "5433:5432" # host_machine/container - port 5433 running machine ---> port 5432 container
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   postgres_data:
