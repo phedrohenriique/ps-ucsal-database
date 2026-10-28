@@ -13,7 +13,7 @@ public class UI {
     }
 
     public void appUI() {
-        Jt.title("Hello World !").use();
+        Jt.title("Plant - Monitoring").use();
 
         Jt.markdown("## A simple click app").use();
 

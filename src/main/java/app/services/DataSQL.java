@@ -291,4 +291,12 @@ public class DataSQL {
         return sql;
     }
 
+    public String getPlantList(){
+        String sql = """
+            SELECT * FROM plants;
+        """;
+
+        return sql;
+    }
+
 }

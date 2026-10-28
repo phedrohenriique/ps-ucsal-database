@@ -2,10 +2,14 @@ package app.services;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import app.configuration.Configuration;
+import app.models.Plant;
 
 public class Database {
 
@@ -94,6 +98,46 @@ public class Database {
                 System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
             }
     }
+
+    public List<Plant> getPlantList(){
+
+        List<Plant> listPlant = new ArrayList<>();
+        String sql = new DataSQL().getPlantList();
+
+        try (
+            Connection connection = DriverManager.getConnection(
+                    this.configuration.getDbUrl(),
+                    this.configuration.getDbUser(),
+                    this.configuration.getDbPassword()
+            ); 
+            Statement stmt = connection.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
+        ) {
+
+                
+
+                while(result.next()){
+                    Plant plant = new Plant(
+                        result.getInt("id_plant"),
+                        result.getString("name_plant"),
+                        result.getString("company_plant"),
+                        result.getString("location_state_plant"),
+                        result.getString("location_plant")
+                    );
+                    listPlant.add(plant);
+                }
+
+                System.out.println("ROWS RETRIEVED - "+ listPlant.size());
+
+
+            } catch (SQLException exception) {
+
+                System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+            }
+
+            return listPlant;
+         
+    } 
 
     // public void generateDataRows() throws SQLException {
     //     try (
