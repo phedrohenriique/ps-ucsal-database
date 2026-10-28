@@ -13,10 +13,9 @@ public class DataSQL {
 
     public String getDeviceListByPlantId() {
         String sql = """
-
         SELECT * 
         FROM devices
-        WHERE plant_id = ?;
+        WHERE id_plant=?;
         """;
 
         return sql;

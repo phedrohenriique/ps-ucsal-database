@@ -1,6 +1,6 @@
 package app.models;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 
 public class Device {
 
@@ -15,7 +15,7 @@ public class Device {
     Integer id_plant;
     String name_device;
     String type_device;
-    Instant created_at;
+    Timestamp created_at;
     Status status_device;
 
     public Device (
@@ -23,7 +23,7 @@ public class Device {
         Integer id_plant, 
         String name_device, 
         String type_device, 
-        Instant created_at, 
+        Timestamp created_at, 
         Status status_device
     ){
         this.id_device = id_device;
@@ -40,7 +40,7 @@ public class Device {
         return "(id_device="+this.id_device+",id_plant="+this.id_plant+",status_device="+this.status_device+")";
     }
 
-    public Instant getCreated_at() {
+    public Timestamp getCreated_at() {
         return created_at;
     }
 

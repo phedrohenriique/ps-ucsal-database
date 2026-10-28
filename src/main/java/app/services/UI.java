@@ -3,6 +3,7 @@ package app.services;
 import java.util.List;
 
 import app.configuration.Configuration;
+import app.models.Device;
 import app.models.Plant;
 import io.javelit.core.Jt;
 
@@ -45,6 +46,33 @@ public class UI {
 
     public void pageDevices() {
         Jt.title("Devices Info").use();
+        String selectedPlant = Jt.sessionState().getString("selectedPlant");
+        Integer selectedPlantNumber = Integer.valueOf(selectedPlant);
+        System.out.println("SELECTED NUMBER:"+selectedPlantNumber);
+        List<Device> deviceList = database.getDeviceListbyPlantId(selectedPlantNumber);
+
+        if (deviceList == null || deviceList.isEmpty()) {
+            Jt.warning("No device list found in database.").use();
+            return;
+        }
+
+        System.out.println("LIST DEVICE SIZE:"+deviceList.size());
+
+        record DeviceSummary(Integer device_id, Integer plant_id, Device.Status status){}
+        
+        List<DeviceSummary> deviceListSummary = deviceList.stream().map(device -> new DeviceSummary(
+            device.getId_device(),
+            device.getId_plant(),
+            device.getStatus_device()
+        )).toList();
+
+        for(DeviceSummary obj : deviceListSummary){
+
+            if (Jt.button("Device: "+String.valueOf(obj.device_id)).useContainerWidth(true).use()) {
+                Jt.sessionState().put("selectedPlant", String.valueOf(obj.device_id));
+            }
+        }
+
     }
 
     public void pageOperations() {
