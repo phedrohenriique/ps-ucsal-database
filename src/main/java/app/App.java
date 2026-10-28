@@ -11,11 +11,10 @@ package app;
 // mvn dependency:tree - check for maven dependencies
 
 import java.sql.SQLException;
-import java.util.List;
 
 import app.configuration.Configuration;
-import app.models.Plant;
 import app.services.Database;
+import app.services.UI;
 
 public class App {
 
@@ -25,18 +24,19 @@ public class App {
 
         Configuration configuration = new Configuration();
         Database database = new Database(configuration);
+        
         try {
 
             database.accessDatabase();
             // database.createDatabaseTables();
             // database.generateDataPlants();
             // database.generateDataDevices();
-            List<Plant> listPlant = database.getPlantList();
-            System.err.println(listPlant);
+            // List<Plant> listPlant = database.getPlantList();
+            // System.err.println(listPlant);
 
             // UI interface app
-            // UI ui = new UI();
-            // ui.runUI();
+            UI ui = new UI();
+            ui.runUI();
 
 
         } catch (SQLException exception) {

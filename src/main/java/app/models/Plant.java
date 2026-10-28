@@ -16,9 +16,29 @@ public class Plant {
         this. location_plant = location;
     }
 
+    public Integer getId_plant() {
+        return id_plant;
+    }
+
+    public String getLocation_plant() {
+        return location_plant;
+    }
+
+    public String getLocation_state_plant() {
+        return location_state_plant;
+    }
+
+    public String getName_plant() {
+        return name_plant;
+    }
+
+    public String getCompany_plant() {
+        return company_plant;
+    }
+
     @Override
     public String toString(){
-        return "(id_plant="+this.id_plant+","+"id_name="+this.name_plant+")";
+        return "(id_plant="+this.id_plant+",id_name="+this.name_plant+")";
     }
 
 }

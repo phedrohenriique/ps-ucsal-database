@@ -1,11 +1,15 @@
 package app.services;
+import java.util.List;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-
+import app.configuration.Configuration;
+import app.models.Plant;
 import io.javelit.core.Jt;
 import io.javelit.core.Server;
 
 public class UI {
+
+    Configuration configuration = new Configuration();
+    Database database = new Database(configuration);
 
     public void runUI() {
         final var server = Server.builder(() -> appUI(), 8080).build();
@@ -13,31 +17,39 @@ public class UI {
     }
 
     public void appUI() {
-        Jt.title("Plant - Monitoring").use();
 
-        Jt.markdown("## A simple click app").use();
-
-        // initialize state - values in the session state are maintained at each update
-        Jt.sessionState().putIfAbsent("count", 0);
-
-        // if button is clicked, increment the count value
-        if (Jt.button("Click me").use()) {
-            Jt.sessionState().computeIfPresentInt("count", (k, v) -> v + 1);
+        Jt.title("Plant Monitoring").use();
+        Jt.markdown("## Wind Power Plants").use();
+    
+        // Fetch plants from the database
+        List<Plant> plants = database.getPlantList();
+    
+        if (plants == null || plants.isEmpty()) {
+            Jt.warning("No plants found in the database.").use();
+            return;
         }
-
-        // display the count
-        int count = Jt.sessionState().getInt("count");
-        boolean plural = count > 1;
-        Jt.markdown("The button was clicked **%s** time%s".formatted(count, plural ? "s" : ""))
-                .use();
-
-        // Use the imported library apache commons-math
-        Jt.divider().use();
-        Jt.markdown("## Using imported apache math dependency").use();
-        double[] values = {1.2, 2.3, 3.4, 4.5, 5.6};
-        DescriptiveStatistics stats = new DescriptiveStatistics(values);
-        double stdDev = stats.getStandardDeviation();
-        Jt.text("Computed statistic with Apache commons-math: " + stdDev).use();
+    
+        // Create a tab label for each plant.
+        // Including the state distinguishes Oitis PI from Oitis BA.
+        List<String> tabLabels = plants.stream().map(plant -> plant.getName_plant() + " / " + plant.getLocation_state_plant()).toList();
+    
+        // Upper navigation menu
+        var tabs = Jt.tabs(tabLabels).use();
+    
+        // Display each plant's information inside its tab
+        for (int i = 0; i < plants.size(); i++) {
+    
+            Plant plant = plants.get(i);
+            var tab = tabs.tab(i);
+    
+            Jt.markdown("### " + plant.getName_plant()).use(tab);
+            Jt.divider().use(tab);
+            
+            Jt.text("Plant ID: " + plant.getId_plant()).use(tab);
+            Jt.text("Company: " + plant.getCompany_plant()).use(tab);
+            Jt.text("State: " + plant.getLocation_state_plant()).use(tab);
+            Jt.text("Location: " + plant.getLocation_plant()).use(tab);
+        }
     }
 
 }
