@@ -9,12 +9,12 @@ package app;
 // mvn compile exec:java
 // mvn clean compile exec:java
 // mvn dependency:tree - check for maven dependencies
-
 import java.sql.SQLException;
 
 import app.configuration.Configuration;
 import app.services.Database;
 import app.services.UI;
+import io.javelit.core.Server;
 
 public class App {
 
@@ -24,7 +24,7 @@ public class App {
 
         Configuration configuration = new Configuration();
         Database database = new Database(configuration);
-        
+
         try {
 
             database.accessDatabase();
@@ -36,8 +36,13 @@ public class App {
 
             // UI interface app
             UI ui = new UI();
-            ui.runUI();
 
+            var server = Server.builder(
+                    () -> ui.navigation(),
+                    8080
+            ).build();
+
+            server.start();
 
         } catch (SQLException exception) {
 
