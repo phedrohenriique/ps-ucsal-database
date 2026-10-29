@@ -1,9 +1,9 @@
 services:
 
-  script:
+  script-1:
 
     image: maven:3.9-eclipse-temurin-25
-    container_name: data_generator
+    container_name: device_1
     restart: "no"
 
     env_file: "./.env"
@@ -11,6 +11,53 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME} # database name not the connection url
+      - DEVICE=1
+
+    networks:
+      - db-network
+
+    volumes:
+      - ./scripts:/app/scripts
+
+    working_dir: /app/scripts
+
+    command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
+  script-2:
+
+    image: maven:3.9-eclipse-temurin-25
+    container_name: device_2
+    restart: "no"
+
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
+      - DEVICE=2
+
+    networks:
+      - db-network
+
+    volumes:
+      - ./scripts:/app/scripts
+
+    working_dir: /app/scripts
+
+    command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
+  script-3:
+
+    image: maven:3.9-eclipse-temurin-25
+    container_name: device_3
+    restart: "no"
+
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
+      - DEVICE=3
 
     networks:
       - db-network

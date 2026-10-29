@@ -23,7 +23,7 @@ public class Database {
     }
 
     public void accessDatabase() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(
+        try (Connection _ = DriverManager.getConnection(
                 this.configuration.getDbUrl(),
                 this.configuration.getDbUser(),
                 this.configuration.getDbPassword()

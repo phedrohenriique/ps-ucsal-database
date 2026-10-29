@@ -22,6 +22,7 @@ class Configuration {
     private final String dbURL;
     private final String dbUser;
     private final String dbPassword;
+    private final String device;
 
     public Configuration() {
 
@@ -30,6 +31,7 @@ class Configuration {
         this.dbURL = System.getenv("DB_URL_EXTERNAL");
         this.dbUser = System.getenv("DB_USER");
         this.dbPassword = System.getenv("DB_PASSWORD");
+        this.device = System.getenv("DEVICE");
 
         if (this.dbURL == null || this.dbURL.isBlank()) {
             throw new IllegalStateException("DB_URL IS NOT CONFIGURED");
@@ -46,6 +48,10 @@ class Configuration {
 
     public String getDbPassword() {
         return this.dbPassword;
+    }
+
+    public String getDevice(){
+        return this.device;
     }
 
 }
@@ -72,7 +78,7 @@ class Database {
 
     private final Configuration configuration = new Configuration();
     private final DataSQL sql = new DataSQL();
-    Integer deviceId = 1;
+    Integer deviceId = Integer.valueOf(configuration.getDevice());
     Integer rows = 0;
 
     public void generateDataRow() {
@@ -94,12 +100,6 @@ class Database {
                         stmt.executeUpdate();
 
                         this.rows++;
-
-                        if (this.deviceId == 25) {
-                            this.deviceId = 0;
-                        }
-
-                        this.deviceId++;
 
                     }
 

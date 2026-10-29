@@ -2,6 +2,8 @@ package app.services;
 
 import java.util.List;
 
+import org.icepear.echarts.Bar;
+
 import app.configuration.Configuration;
 import app.models.Device;
 import app.models.Plant;
@@ -21,16 +23,16 @@ public class UI {
             return;
         }
 
-        record PlantSummary(Integer id, String name){}
-        
+        record PlantSummary(Integer id, String name) {}
+
         List<PlantSummary> plant_name_and_state = plants.stream().map(plant -> new PlantSummary(
-            plant.getId_plant(),
-            plant.getName_plant() + " / " + plant.getLocation_state_plant()
+                plant.getId_plant(),
+                plant.getName_plant() + " / " + plant.getLocation_state_plant()
         )).toList();
 
         Jt.title("Plants Info").use();
 
-        for(PlantSummary obj : plant_name_and_state){
+        for (PlantSummary obj : plant_name_and_state) {
 
             if (Jt.button(obj.name()).useContainerWidth(true).use()) {
                 Jt.sessionState().put("selectedPlant", String.valueOf(obj.id()));
@@ -41,14 +43,16 @@ public class UI {
 
         if (selectedPlant != null) {
             Jt.text("Selected plant: " + selectedPlant).use();
+            addHistogram(selectedPlant);
         }
+
     }
 
     public void pageDevices() {
         Jt.title("Devices Info").use();
         String selectedPlant = Jt.sessionState().getString("selectedPlant");
         Integer selectedPlantNumber = Integer.valueOf(selectedPlant);
-        System.out.println("SELECTED NUMBER:"+selectedPlantNumber);
+        System.out.println("SELECTED NUMBER:" + selectedPlantNumber);
         List<Device> deviceList = database.getDeviceListbyPlantId(selectedPlantNumber);
 
         if (deviceList == null || deviceList.isEmpty()) {
@@ -56,21 +60,27 @@ public class UI {
             return;
         }
 
-        System.out.println("LIST DEVICE SIZE:"+deviceList.size());
+        System.out.println("LIST DEVICE SIZE:" + deviceList.size());
 
-        record DeviceSummary(Integer device_id, Integer plant_id, Device.Status status){}
-        
+        record DeviceSummary(Integer device_id, Integer plant_id, Device.Status status) {}
+
         List<DeviceSummary> deviceListSummary = deviceList.stream().map(device -> new DeviceSummary(
-            device.getId_device(),
-            device.getId_plant(),
-            device.getStatus_device()
+                device.getId_device(),
+                device.getId_plant(),
+                device.getStatus_device()
         )).toList();
 
-        for(DeviceSummary obj : deviceListSummary){
+        for (DeviceSummary obj : deviceListSummary) {
 
-            if (Jt.button("Device: "+String.valueOf(obj.device_id)).useContainerWidth(true).use()) {
-                Jt.sessionState().put("selectedPlant", String.valueOf(obj.device_id));
+            if (Jt.button("Device: " + String.valueOf(obj.device_id)).useContainerWidth(true).use()) {
+                Jt.sessionState().put("selectedDevice", String.valueOf(obj.device_id));
             }
+        }
+
+        String selectedDevice = Jt.sessionState().getString("selectedDevice");
+
+        if (selectedPlant != null) {
+            Jt.text("Selected device: " + selectedDevice).use();
         }
 
     }
@@ -129,6 +139,52 @@ public class UI {
             Jt.text("State: " + plant.getLocation_state_plant()).use(tab);
             Jt.text("Location: " + plant.getLocation_plant()).use(tab);
         }
+    }
+
+    public void addHistogram(String plantId) {
+        Jt.title("Average Data per Device").use();
+
+        // plantId =  (plantId != null) ? plantId : "1";
+        Integer id = Integer.valueOf(plantId);
+        List<Device> devices = database.getDeviceListbyPlantId(id);
+
+        List<String> deviceNames = devices.stream().map(device -> Integer.toString(device.getId_device())).toList();
+        Integer size = deviceNames.size();
+
+        String[] deviceNamesConverted = new String[size];
+        Number[] mockDataSpeed = new Number[size];
+        Number[] mockDataEnergy = new Number[size];
+
+        int i = 0;
+        for (String name : deviceNames) {
+
+            deviceNamesConverted[i] = name;
+            i++;
+        }
+
+        int j = 0;
+        for (String _ : deviceNames) {
+            mockDataEnergy[j] = Math.random() * 300 + 100;
+            j++;
+        }
+
+        int k = 0;
+        for (String _ : deviceNames) {
+            mockDataSpeed[k] = Math.random() * 100 + 10;
+            k++;
+        }
+
+        Bar bar = new Bar()
+                .setLegend()
+                .setTooltip("item")
+                .addXAxis(deviceNamesConverted)
+                .addYAxis()
+                // .addSeries("2015", new Number[]{43.3, 83.1, 86.4, 72.4})
+                .addSeries("Wind Speed m/s - 2026", mockDataSpeed)
+                .addSeries("Energy Kw/h - 2026", mockDataEnergy);
+                
+
+        Jt.echarts(bar).use();
     }
 
 }
