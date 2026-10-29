@@ -12,11 +12,19 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME} # database name not the connection url
 
+    networks:
+      - db-network
+
     volumes:
       - ./scripts:/app/scripts
 
     working_dir: /app/scripts
 
     command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
+networks:
+  db-network:
+    name: db-network
+    external: true
 
     

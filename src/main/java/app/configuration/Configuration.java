@@ -9,7 +9,7 @@ public class Configuration {
 
     public Configuration(){
         Dotenv dotenv = Dotenv.load();
-        this.dbURL =  dotenv.get("DB_URL");
+        this.dbURL =  dotenv.get("DB_URL_INTERNAL");
         this.dbUser = dotenv.get("DB_USER");
         this.dbPassword = dotenv.get("DB_PASSWORD");
 

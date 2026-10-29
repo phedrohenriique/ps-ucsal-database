@@ -27,7 +27,7 @@ class Configuration {
 
         // environment variables already passed in the container
         // Dotenv library loads from file, wich does not exist in script
-        this.dbURL = System.getenv("DB_URL_CONTAINER");
+        this.dbURL = System.getenv("DB_URL_EXTERNAL");
         this.dbUser = System.getenv("DB_USER");
         this.dbPassword = System.getenv("DB_PASSWORD");
 
