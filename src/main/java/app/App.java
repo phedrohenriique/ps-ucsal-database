@@ -7,8 +7,11 @@ package app;
 // $ java -cp target/classes App
 // to run directly
 // mvn compile exec:java
+
 // mvn clean compile exec:java
 // mvn dependency:tree - check for maven dependencies
+// mvn -f scripts/script-pom.xml clean compile exec:java
+
 import java.sql.SQLException;
 
 import app.configuration.Configuration;

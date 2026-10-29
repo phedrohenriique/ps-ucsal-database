@@ -1,0 +1,22 @@
+services:
+
+  script:
+
+    image: maven:3.9-eclipse-temurin-25
+    container_name: data_generator
+    restart: "no"
+
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
+
+    volumes:
+      - ./scripts:/app/scripts
+
+    working_dir: /app/scripts
+
+    command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
+    
