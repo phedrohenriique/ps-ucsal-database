@@ -87,6 +87,49 @@ public class UI {
 
     public void pageOperations() {
         Jt.title("Operations").use();
+
+        Jt.title("Plant").use();
+
+        var tabsPlant = Jt.tabs(
+                List.of("Create", "Update", "Delete")
+        ).key("tabsPlant").use();
+
+        // CREATE PLANTS
+
+        var formCreatePlant = Jt.form().key("createForm").use(tabsPlant.tab("Create"));
+
+        String namePlantCreate = Jt.textInput("name").key("name").use(formCreatePlant);
+        String companyPlantCreate = Jt.textInput("company").key("company").use(formCreatePlant);
+        String locationPlantCreate = Jt.textInput("locationPlant").key("locationPlant").use(formCreatePlant);
+        String locationStatePlantCreate = Jt.textInput("locationStatePlant").key("locationStatePlant").use(formCreatePlant);
+
+        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant); // add boxes for failure or success
+
+        if (submittedCreate) {
+            Jt.success("plant created").key("tooltipSuccessCreate").use();
+        }
+
+        // UPDATE PLANTS
+
+        var formUpdatePlant = Jt.form().key("updateForm").use(tabsPlant.tab("Update"));
+
+        String idPlantUpdate = Jt.textInput("id").key("idUpdate").use(formUpdatePlant);
+        String namePlantUpdate = Jt.textInput("name").key("nameUpdate").use(formUpdatePlant);
+        String companyPlantUpdate = Jt.textInput("company").key("companyUpdate").use(formUpdatePlant);
+        String locationPlantUpdate = Jt.textInput("locationPlant").key("locationPlantUpdate").use(formUpdatePlant);
+        String locationStatePlantUpdate = Jt.textInput("locationStatePlant").key("locationStatePlantUpdate").use(formUpdatePlant);
+
+        boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant); // add boxes for failure or success
+
+        if (submittedUpdate) {
+            Jt.success("plant updated").key("tooltipSuccessUpdate").use();
+        }
+
+        Jt.title("Device").use();
+
+        var tabsDevice = Jt.tabs(
+                List.of("Create", "Update", "Delete")
+        ).key("tabsDevice").use();
     }
 
     public void navigation() {
@@ -182,7 +225,6 @@ public class UI {
                 // .addSeries("2015", new Number[]{43.3, 83.1, 86.4, 72.4})
                 .addSeries("Wind Speed m/s - 2026", mockDataSpeed)
                 .addSeries("Energy Kw/h - 2026", mockDataEnergy);
-                
 
         Jt.echarts(bar).use();
     }
