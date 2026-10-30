@@ -268,6 +268,10 @@ public class UI {
         }
     }
 
+    public void getPlantHistogram(){
+        
+    }
+
     public void tablePlantsList(List<Plant> plantsList) {
 
         // record Person(String name, int age, String city) {
