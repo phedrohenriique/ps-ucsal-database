@@ -4,10 +4,14 @@ import java.util.List;
 
 import org.icepear.echarts.Bar;
 
+import app.configuration.AppConstants;
 import app.configuration.Configuration;
 import app.models.Device;
 import app.models.Plant;
+import io.javelit.components.layout.TabsComponent.Tabs;
 import io.javelit.core.Jt;
+
+
 
 public class UI {
 
@@ -86,102 +90,45 @@ public class UI {
     }
 
     public void pageOperations() {
-        Jt.title("Operations").use();
+        Jt.title("OPERATIONS").use();
 
-        Jt.title("Plant").use();
+        Jt.title("PLANT").use();
 
-        var tabsPlant = Jt.tabs(
-                List.of("Create", "Update", "Delete")
-        ).key("tabsPlant").use();
+        var tabsPlant = Jt.tabs(List.of("Create", "Update", "Delete")).key("tabsPlant").use();
 
-        // CREATE PLANTS
+        // PLANTS - FORMS
 
-        var formCreatePlant = Jt.form().key("createForm").use(tabsPlant.tab("Create"));
+        formCreatePlant(tabsPlant);
+        formUpdatePlant(tabsPlant);
+        formDeletePlant(tabsPlant);
 
-        String namePlantCreate = Jt.textInput("name").key("name").use(formCreatePlant);
-        String companyPlantCreate = Jt.textInput("company").key("company").use(formCreatePlant);
-        String locationPlantCreate = Jt.textInput("locationPlant").key("locationPlant").use(formCreatePlant);
-        String locationStatePlantCreate = Jt.textInput("locationStatePlant").key("locationStatePlant").use(formCreatePlant);
+        // DEVICE - FORMS
 
-        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant); // add boxes for failure or success
+        
+        Jt.title("DEVICE").use();
 
-        if (submittedCreate) {
-            Jt.success("plant created").key("tooltipSuccessCreate").use();
-        }
+        var tabsDevice = Jt.tabs(List.of("Create", "Update", "Delete")).key("tabsDevice").use();
 
-        // UPDATE PLANTS
+        formCreateDevice(tabsDevice);
+        formUpdateDevice(tabsDevice);
+        formDeleteDevice(tabsDevice);
 
-        var formUpdatePlant = Jt.form().key("updateForm").use(tabsPlant.tab("Update"));
-
-        String idPlantUpdate = Jt.textInput("id").key("idUpdate").use(formUpdatePlant);
-        String namePlantUpdate = Jt.textInput("name").key("nameUpdate").use(formUpdatePlant);
-        String companyPlantUpdate = Jt.textInput("company").key("companyUpdate").use(formUpdatePlant);
-        String locationPlantUpdate = Jt.textInput("locationPlant").key("locationPlantUpdate").use(formUpdatePlant);
-        String locationStatePlantUpdate = Jt.textInput("locationStatePlant").key("locationStatePlantUpdate").use(formUpdatePlant);
-
-        boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant); // add boxes for failure or success
-
-        if (submittedUpdate) {
-            Jt.success("plant updated").key("tooltipSuccessUpdate").use();
-        }
-
-        Jt.title("Device").use();
-
-        var tabsDevice = Jt.tabs(
-                List.of("Create", "Update", "Delete")
-        ).key("tabsDevice").use();
     }
 
     public void navigation() {
         var page = Jt.navigation(
-                Jt.page("/page1", () -> pagePlants())
+                Jt.page("/plants", () -> pagePlants())
                         .title("Plants")
                         .icon(":factory:"),
-                Jt.page("/page2", () -> pageDevices())
+                Jt.page("/devices", () -> pageDevices())
                         .title("Devices")
                         .icon(":wind_power:"),
-                Jt.page("/page3", () -> pageOperations())
+                Jt.page("/operations", () -> pageOperations())
                         .title("Operations")
                         .icon(":settings:")
         ).use();
 
         page.run();
-    }
-
-    public void appUI() {
-
-        Jt.title("Plant Monitoring").use();
-        Jt.markdown("## Wind Power Plants").use();
-
-        // Fetch plants from the database
-        List<Plant> plants = database.getPlantList();
-
-        if (plants == null || plants.isEmpty()) {
-            Jt.warning("No plants found in the database.").use();
-            return;
-        }
-
-        // Create a tab label for each plant.
-        // Including the state distinguishes Oitis PI from Oitis BA.
-        List<String> tabLabels = plants.stream().map(plant -> plant.getName_plant() + " / " + plant.getLocation_state_plant()).toList();
-
-        // Upper navigation menu
-        var tabs = Jt.tabs(tabLabels).use();
-
-        // Display each plant's information inside its tab
-        for (int i = 0; i < plants.size(); i++) {
-
-            Plant plant = plants.get(i);
-            var tab = tabs.tab(i);
-
-            Jt.markdown("### " + plant.getName_plant()).use(tab);
-            Jt.divider().use(tab);
-
-            Jt.text("Plant ID: " + plant.getId_plant()).use(tab);
-            Jt.text("Company: " + plant.getCompany_plant()).use(tab);
-            Jt.text("State: " + plant.getLocation_state_plant()).use(tab);
-            Jt.text("Location: " + plant.getLocation_plant()).use(tab);
-        }
     }
 
     public void addHistogram(String plantId) {
@@ -227,6 +174,99 @@ public class UI {
                 .addSeries("Energy Kw/h - 2026", mockDataEnergy);
 
         Jt.echarts(bar).use();
+    }
+
+    public void formCreatePlant(Tabs tab) {
+
+        var formCreatePlant = Jt.form().key("createForm").use(tab.tab("Create"));
+
+        String namePlantCreate = Jt.textInput("name").key("name").use(formCreatePlant);
+        String companyPlantCreate = Jt.textInput("company").key("company").use(formCreatePlant);
+        String locationPlantCreate = Jt.textInput("location").key("locationPlant").use(formCreatePlant);
+        String locationStatePlantCreate = Jt.textInput("state").key("locationStatePlant").use(formCreatePlant);
+
+        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant); // add boxes for failure or success
+
+        if (submittedCreate) {
+            Jt.success("plant created").key("tooltipSuccessCreate").use();
+        }
+
+    }
+
+    public void formUpdatePlant(Tabs tab) {
+        var formUpdatePlant = Jt.form().key("updateForm").use(tab.tab("Update"));
+
+        String idPlantUpdate = Jt.textInput("id").key("idUpdate").use(formUpdatePlant);
+        String namePlantUpdate = Jt.textInput("name").key("nameUpdate").use(formUpdatePlant);
+        String companyPlantUpdate = Jt.textInput("company").key("companyUpdate").use(formUpdatePlant);
+        String locationPlantUpdate = Jt.textInput("location").key("locationPlantUpdate").use(formUpdatePlant);
+        String locationStatePlantUpdate = Jt.textInput("state").key("locationStatePlantUpdate").use(formUpdatePlant);
+
+        boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant); // add boxes for failure or success
+
+        if (submittedUpdate) {
+            Jt.success("plant updated").key("tooltipSuccessUpdate").use();
+        }
+    }
+
+    public void formDeletePlant(Tabs tab){
+        var formUpdatePlant = Jt.form().key("deleteForm").use(tab.tab("Delete"));
+
+        String idPlantDelete = Jt.textInput("id").key("idDelete").use(formUpdatePlant);
+
+        boolean submittedDelete = Jt.formSubmitButton("Delete Plant").key("formButtonDelete").use(formUpdatePlant); // add boxes for failure or success
+
+        if (submittedDelete) {
+            Jt.success("plant deleted").key("tooltipSuccessDelete").use();
+        }
+    }
+
+    public void formCreateDevice(Tabs tab) {
+
+        var formCreateDevice = Jt.form().key(AppConstants.KEY_DEVICE_FORM_CREATE+"form").use(tab.tab("Create"));
+
+        String idPlantCreate = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_CREATE+"id").use(formCreateDevice);
+        String nameDeviceCreate = Jt.textInput("name").key(AppConstants.KEY_DEVICE_FORM_CREATE+"name").use(formCreateDevice);
+        String typeDeviceCreate = Jt.textInput("company").key(AppConstants.KEY_DEVICE_FORM_CREATE+"company").use(formCreateDevice);
+
+        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key(AppConstants.KEY_DEVICE_FORM_CREATE+"button").use(formCreateDevice); // add boxes for failure or success
+
+        if (submittedCreate) {
+            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_CREATE+"tooltip").use();
+        }
+    }
+
+    public void formUpdateDevice(Tabs tab) {
+
+        var formCreateDevice = Jt.form().key(AppConstants.KEY_DEVICE_FORM_UPDATE+"form").use(tab.tab("Update"));
+
+        String idDeviceUpdate = Jt.textInput("id").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"id").use(formCreateDevice);
+        String idPlantUpdate = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"idPlant").use(formCreateDevice);
+        String nameDeviceUpdate = Jt.textInput("name").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"name").use(formCreateDevice);
+        String typeDeviceUpdate = Jt.textInput("company").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"company").use(formCreateDevice);
+        String StatusDeviceUpdate = Jt.textInput("status").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"status").use(formCreateDevice);
+
+        boolean submittedUpdate = Jt.formSubmitButton("Create Plant").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"button").use(formCreateDevice); // add boxes for failure or success
+
+        if (submittedUpdate) {
+            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_UPDATE+"tooltip").use();
+        }
+
+    }
+
+    public void formDeleteDevice(Tabs tab){
+
+        var formDeleteDevice = Jt.form().key(AppConstants.KEY_DEVICE_FORM_DELETE+"form").use(tab.tab("Delete"));
+
+        String idDeviceDelete = Jt.textInput("id").key(AppConstants.KEY_DEVICE_FORM_DELETE+"id").use(formDeleteDevice);
+        String idPlantDelete = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_DELETE+"idPlant").use(formDeleteDevice);
+        
+
+        boolean submittedDelete = Jt.formSubmitButton("Create Plant").key(AppConstants.KEY_DEVICE_FORM_DELETE+"button").use(formDeleteDevice); // add boxes for failure or success
+
+        if (submittedDelete) {
+            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_DELETE+"tooltip").use();
+        }
     }
 
 }
