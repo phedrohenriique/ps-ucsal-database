@@ -13,7 +13,7 @@ public class Device {
 
     Integer id_device;
     Integer id_plant;
-    String name_device;
+    String model_device;
     String type_device;
     Timestamp created_at;
     Status status_device;
@@ -21,14 +21,14 @@ public class Device {
     public Device (
         Integer id_device, 
         Integer id_plant, 
-        String name_device, 
+        String model_device, 
         String type_device, 
         Timestamp created_at, 
         Status status_device
     ){
         this.id_device = id_device;
         this. id_plant = id_plant;
-        this.name_device = name_device;
+        this.model_device = model_device;
         this.type_device = type_device;
         this.created_at = created_at;
         this.status_device = status_device;
@@ -53,7 +53,7 @@ public class Device {
     }
 
     public String getName_device() {
-        return name_device;
+        return model_device;
     }
 
     public Status getStatus_device() {

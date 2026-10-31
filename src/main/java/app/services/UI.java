@@ -17,6 +17,7 @@ public class UI {
     Database database = new Database(configuration);
 
     public void navigation() {
+
         var page = Jt.navigation(
                 Jt.page("/plants", () -> pagePlants())
                         .title("Plants")
@@ -26,7 +27,8 @@ public class UI {
                         .icon(":wind_power:"),
                 Jt.page("/operations", () -> pageOperations())
                         .title("Operations")
-                        .icon(":settings:"))
+                        .icon(":settings:"),
+                Jt.page("/device-details", () -> pageDeviceDetails()))
                 .use();
 
         page.run();
@@ -55,12 +57,61 @@ public class UI {
         if (submittedMetricsPlantId) {
             System.out.println("metricsPlantId" + metricsPlantId);
             addHistogram(metricsPlantId);
-            Jt.success("device created").key("submittedMetricsPlantId" + "tooltip").use();
         }
 
     }
 
     public void pageDevices() {
+
+        Jt.title("Devices Info").use();
+
+        // Jt.text(body)("Devices Info").use();
+        List<Plant> plantsList = database.getPlantList();
+
+        if (plantsList == null || plantsList.isEmpty()) {
+            Jt.warning("No plants found in the database.").use();
+            return;
+        }
+
+        tablePlantsList(plantsList);
+
+        Jt.title("Device List from Plant").use();
+
+        var getDeviceListByPlantForm = Jt.form().key("getDeviceListByPlant").use();
+        String plantId = Jt.textInput("id").key("plantId").use(getDeviceListByPlantForm);
+        boolean submittedDeviceList = Jt.formSubmitButton("Get Device List").key("submittedDeviceList")
+                .use(getDeviceListByPlantForm); // add boxes for failure or success
+
+        // process first form
+        if (submittedDeviceList) {
+            Integer plantIdValue = Integer.valueOf(plantId);
+            List<Device> deviceList = database.getDeviceListbyPlantId(plantIdValue);
+            Jt.sessionState().put("deviceList", deviceList);
+            Jt.sessionState().put("selectedPlantId", plantIdValue);
+        }
+
+        if (Jt.sessionState().get("deviceList") != null) {
+
+            List<Device> deviceList = (List<Device>) Jt.sessionState().get("deviceList");
+
+            tableDevicesList(deviceList);
+
+            Jt.title("Device Detail").use();
+
+            var getDeviceDetailForm = Jt.form().key("getDeviceDetail").use();
+            String deviceIdDetail = Jt.textInput("id device").key("deviceIdDetail").use(getDeviceDetailForm);
+            String plantIdDetail = Jt.textInput("id plant").key("plantIdDetail").use(getDeviceDetailForm);
+            boolean submittedDeviceDetail = Jt.formSubmitButton("Device Detail").key("submittedDeviceDetail")
+                    .use(getDeviceDetailForm); // add boxes for failure or success
+
+            if (submittedDeviceDetail) {
+
+                Jt.sessionState().put("deviceId", deviceIdDetail);
+                Jt.sessionState().put("plantId", plantIdDetail);
+                Jt.switchPage("/device-details");
+            }
+
+        }
 
     }
 
@@ -84,6 +135,21 @@ public class UI {
         formCreateDevice(tabsDevice);
         formUpdateDevice(tabsDevice);
         formDeleteDevice(tabsDevice);
+
+    }
+
+    public void pageDeviceDetails() {
+
+        if (Jt.sessionState().get("deviceId") == null | Jt.sessionState().get("plantId") == null) {
+            Jt.warning("device Id and plant Id are required - go to Devices page or /devices").use();
+        }
+        
+
+        if (Jt.sessionState().get("deviceId") != null & Jt.sessionState().get("plantId") != null) {
+            Jt.success("device detail retrieved for deviceId:" + Jt.sessionState().getString("deviceId") + " plantId: " + Jt.sessionState().getString("plantId"))
+                    .key("submittedMetricsPlantId" + "tooltip")
+                    .use();
+        }
 
     }
 
@@ -142,12 +208,7 @@ public class UI {
         String locationPlantCreate = Jt.textInput("location").key("locationPlant").use(formCreatePlant);
         String locationStatePlantCreate = Jt.textInput("state").key("locationStatePlant").use(formCreatePlant);
 
-        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant); // add
-                                                                                                                    // boxes
-                                                                                                                    // for
-                                                                                                                    // failure
-                                                                                                                    // or
-                                                                                                                    // success
+        boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant);
 
         if (submittedCreate) {
             Jt.success("plant created").key("tooltipSuccessCreate").use();
@@ -164,12 +225,7 @@ public class UI {
         String locationPlantUpdate = Jt.textInput("location").key("locationPlantUpdate").use(formUpdatePlant);
         String locationStatePlantUpdate = Jt.textInput("state").key("locationStatePlantUpdate").use(formUpdatePlant);
 
-        boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant); // add
-                                                                                                                    // boxes
-                                                                                                                    // for
-                                                                                                                    // failure
-                                                                                                                    // or
-                                                                                                                    // success
+        boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant);
 
         if (submittedUpdate) {
             Jt.success("plant updated").key("tooltipSuccessUpdate").use();
@@ -181,12 +237,7 @@ public class UI {
 
         String idPlantDelete = Jt.textInput("id").key("idDelete").use(formUpdatePlant);
 
-        boolean submittedDelete = Jt.formSubmitButton("Delete Plant").key("formButtonDelete").use(formUpdatePlant); // add
-                                                                                                                    // boxes
-                                                                                                                    // for
-                                                                                                                    // failure
-                                                                                                                    // or
-                                                                                                                    // success
+        boolean submittedDelete = Jt.formSubmitButton("Delete Plant").key("formButtonDelete").use(formUpdatePlant);
 
         if (submittedDelete) {
             Jt.success("plant deleted").key("tooltipSuccessDelete").use();
@@ -199,14 +250,14 @@ public class UI {
 
         String idPlantCreate = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_CREATE + "id")
                 .use(formCreateDevice);
-        String nameDeviceCreate = Jt.textInput("name").key(AppConstants.KEY_DEVICE_FORM_CREATE + "name")
+        String modelDeviceCreate = Jt.textInput("model").key(AppConstants.KEY_DEVICE_FORM_CREATE + "model")
                 .use(formCreateDevice);
-        String typeDeviceCreate = Jt.textInput("company").key(AppConstants.KEY_DEVICE_FORM_CREATE + "company")
+        String typeDeviceCreate = Jt.textInput("type").key(AppConstants.KEY_DEVICE_FORM_CREATE + "type")
                 .use(formCreateDevice);
 
         boolean submittedCreate = Jt.formSubmitButton("Create Plant")
                 .key(AppConstants.KEY_DEVICE_FORM_CREATE + "button").use(formCreateDevice); // add boxes for failure or
-                                                                                            // success
+        // success
 
         if (submittedCreate) {
             Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_CREATE + "tooltip").use();
@@ -217,20 +268,19 @@ public class UI {
 
         var formCreateDevice = Jt.form().key(AppConstants.KEY_DEVICE_FORM_UPDATE + "form").use(tab.tab("Update"));
 
-        String idDeviceUpdate = Jt.textInput("id").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "id")
+        String idDeviceUpdate = Jt.textInput("id - device").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "idDevice")
                 .use(formCreateDevice);
         String idPlantUpdate = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "idPlant")
                 .use(formCreateDevice);
-        String nameDeviceUpdate = Jt.textInput("name").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "name")
+        String modelDeviceUpdate = Jt.textInput("model").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "model")
                 .use(formCreateDevice);
-        String typeDeviceUpdate = Jt.textInput("company").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "company")
+        String typeDeviceUpdate = Jt.textInput("type").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "type")
                 .use(formCreateDevice);
         String StatusDeviceUpdate = Jt.textInput("status").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "status")
                 .use(formCreateDevice);
 
         boolean submittedUpdate = Jt.formSubmitButton("Create Plant")
-                .key(AppConstants.KEY_DEVICE_FORM_UPDATE + "button").use(formCreateDevice); // add boxes for failure or
-                                                                                            // success
+                .key(AppConstants.KEY_DEVICE_FORM_UPDATE + "button").use(formCreateDevice);
 
         if (submittedUpdate) {
             Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
@@ -242,14 +292,14 @@ public class UI {
 
         var formDeleteDevice = Jt.form().key(AppConstants.KEY_DEVICE_FORM_DELETE + "form").use(tab.tab("Delete"));
 
-        String idDeviceDelete = Jt.textInput("id").key(AppConstants.KEY_DEVICE_FORM_DELETE + "id")
+        String idDeviceDelete = Jt.textInput("id - device").key(AppConstants.KEY_DEVICE_FORM_DELETE + "id")
                 .use(formDeleteDevice);
         String idPlantDelete = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_DELETE + "idPlant")
                 .use(formDeleteDevice);
 
         boolean submittedDelete = Jt.formSubmitButton("Create Plant")
                 .key(AppConstants.KEY_DEVICE_FORM_DELETE + "button").use(formDeleteDevice); // add boxes for failure or
-                                                                                            // success
+        // success
 
         if (submittedDelete) {
             Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
@@ -262,10 +312,19 @@ public class UI {
 
     public void tablePlantsList(List<Plant> plantsList) {
 
-        var tableContainer = Jt.container()
+        var tableContainer = Jt.container().key("tablePlantsList")
                 .height(300)
                 .use();
         Jt.table(plantsList).use(tableContainer);
 
     }
+
+    public void tableDevicesList(List<Device> devicesList) {
+        System.out.println(devicesList);
+        var tableContainer = Jt.container().key("tableDevicesList")
+                .height(300)
+                .use();
+        Jt.table(devicesList).use(tableContainer);
+    }
+
 }

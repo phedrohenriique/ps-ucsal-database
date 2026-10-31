@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS plants (
 CREATE TABLE IF NOT EXISTS devices (
     id_device INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_plant INT NOT NULL,
-    name_device VARCHAR(100),
+    model_device VARCHAR(100),
     type_device VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status_device VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
@@ -60,168 +60,243 @@ VALUES
 -- Resolve plant IDs from plant name and state instead of hard-coding identity values.
 INSERT INTO devices (
             id_plant,
-            name_device,
+            model_device,
             type_device
         )
         VALUES
             -- Complexo Eólico Lagoa dos Ventos (PI)
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
-                   AND location_state_plant = 'PI'),
-                'Lagoa dos Ventos - Device 01', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
-                   AND location_state_plant = 'PI'),
-                'Lagoa dos Ventos - Device 02', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
-                   AND location_state_plant = 'PI'),
-                'Lagoa dos Ventos - Device 03', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
+                    AND location_state_plant = 'PI'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
-                   AND location_state_plant = 'PI'),
-                'Lagoa dos Ventos - Device 04', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
+                    AND location_state_plant = 'PI'
+                ),
+                'WD200-7700', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
-                   AND location_state_plant = 'PI'),
-                'Lagoa dos Ventos - Device 05', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Lagoa dos Ventos'
+                    AND location_state_plant = 'PI'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
         
             -- Complexo Eólico Campo Largo (BA)
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Campo Largo'
-                   AND location_state_plant = 'BA'),
-                'Campo Largo - Device 01', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Campo Largo'
+                    AND location_state_plant = 'BA'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Campo Largo'
-                   AND location_state_plant = 'BA'),
-                'Campo Largo - Device 02', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Campo Largo'
+                    AND location_state_plant = 'BA'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Campo Largo'
-                   AND location_state_plant = 'BA'),
-                'Campo Largo - Device 03', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Campo Largo'
+                    AND location_state_plant = 'BA'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Campo Largo'
-                   AND location_state_plant = 'BA'),
-                'Campo Largo - Device 04', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Campo Largo'
+                    AND location_state_plant = 'BA'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Campo Largo'
-                   AND location_state_plant = 'BA'),
-                'Campo Largo - Device 05', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Campo Largo'
+                    AND location_state_plant = 'BA'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
         
             -- Complexo Eólico do Chuí (RS)
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico do Chuí'
-                   AND location_state_plant = 'RS'),
-                'Chuí - Device 01', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico do Chuí'
+                    AND location_state_plant = 'RS'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico do Chuí'
-                   AND location_state_plant = 'RS'),
-                'Chuí - Device 02', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico do Chuí'
+                    AND location_state_plant = 'RS'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico do Chuí'
-                   AND location_state_plant = 'RS'),
-                'Chuí - Device 03', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico do Chuí'
+                    AND location_state_plant = 'RS'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico do Chuí'
-                   AND location_state_plant = 'RS'),
-                'Chuí - Device 04', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico do Chuí'
+                    AND location_state_plant = 'RS'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico do Chuí'
-                   AND location_state_plant = 'RS'),
-                'Chuí - Device 05', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico do Chuí'
+                    AND location_state_plant = 'RS'
+                ),
+                'V172-7.2', 
+                'wind_turbine'
             ),
         
             -- Complexo Eólico Oitis (PI)
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'PI'),
-                'Oitis PI - Device 01', 'Wind Turbine'
+                (   
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'PI'),
-                'Oitis PI - Device 02', 'Wind Turbine'
+                (   
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'PI'),
-                'Oitis PI - Device 03', 'Wind Turbine'
+                (   
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'PI'),
-                'Oitis PI - Device 04', 'Wind Turbine'
+                (   
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'PI'),
-                'Oitis PI - Device 05', 'Wind Turbine'
+                (   
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'PI'
+                ),
+                'SI-270150', 
+                'wind_turbine'
             ),
         
             -- Complexo Eólico Oitis (BA)
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'BA'),
-                'Oitis BA - Device 01', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'BA'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'BA'),
-                'Oitis BA - Device 02', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'BA'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'BA'),
-                'Oitis BA - Device 03', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'BA'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'BA'),
-                'Oitis BA - Device 04', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'BA'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             ),
             (
-                (SELECT id_plant FROM Plants
-                 WHERE name_plant = 'Complexo Eólico Oitis'
-                   AND location_state_plant = 'BA'),
-                'Oitis BA - Device 05', 'Wind Turbine'
+                (
+                    SELECT id_plant FROM Plants
+                    WHERE name_plant = 'Complexo Eólico Oitis'
+                    AND location_state_plant = 'BA'
+                ),
+                'SI-230100', 
+                'wind_turbine'
             );
 
 COMMIT;
