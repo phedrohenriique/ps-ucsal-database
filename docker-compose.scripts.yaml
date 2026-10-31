@@ -69,6 +69,52 @@ services:
 
     command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
 
+  script-4:
+
+    image: maven:3.9-eclipse-temurin-25
+    container_name: device_4
+    restart: "no"
+
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
+      - DEVICE=4
+
+    networks:
+      - db-network
+
+    volumes:
+      - ./scripts:/app/scripts
+
+    working_dir: /app/scripts
+
+    command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
+  script-5:
+
+    image: maven:3.9-eclipse-temurin-25
+    container_name: device_5
+    restart: "no"
+
+    env_file: "./.env"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME} # database name not the connection url
+      - DEVICE=5
+
+    networks:
+      - db-network
+
+    volumes:
+      - ./scripts:/app/scripts
+
+    working_dir: /app/scripts
+
+    command: ["mvn", "-f", "script-pom.xml", "compile", "exec:java"]
+
 networks:
   db-network:
     name: db-network

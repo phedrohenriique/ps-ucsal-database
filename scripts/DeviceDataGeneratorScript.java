@@ -50,7 +50,7 @@ class Configuration {
         return this.dbPassword;
     }
 
-    public String getDevice(){
+    public String getDevice() {
         return this.device;
     }
 
@@ -64,7 +64,7 @@ class DataSQL {
                 id_device, 
                 temperature, 
                 wind_speed_ms, 
-                energy_generated
+                energy_mw
             )
             VALUES (?, ?, ?, ?);
         """;
@@ -90,21 +90,30 @@ class Database {
                         this.configuration.getDbPassword()
                 ); PreparedStatement stmt = connection.prepareStatement(sql.addDataRow());) {
 
-                    for (Integer i = 0; i < 1000; i++) {
+                    for (Integer i = 0; i < 10000; i++) {
+                        try {
 
-                        stmt.setInt(1, this.deviceId);
-                        stmt.setInt(2, 100);
-                        stmt.setInt(3, 100);
-                        stmt.setInt(4, 100);
+                            stmt.setInt(1, this.deviceId);
+                            stmt.setDouble(2, Math.random() * 50 + -10);
+                            stmt.setDouble(3, Math.random() * 45 + 5);
+                            stmt.setDouble(4, Math.random() * 10 + 8);
 
-                        stmt.executeUpdate();
+                            stmt.executeUpdate();
 
-                        this.rows++;
+                            this.rows++;
+
+                            Thread.sleep(2000); // Pause for 2000 milliseconds (2 seconds)
+                        } catch (InterruptedException exception) {
+                            System.out.println("ERROR: " + exception.getMessage());
+                            Thread.currentThread().interrupt(); // Restore the interrupted status
+                        } catch (Exception exception) {
+                            System.out.println("ERROR: " + exception.getMessage());
+
+                        }
+
+                        System.out.println("ROWS INSERTED - " + this.rows);
 
                     }
-
-                    System.out.println("SUCCESS INSERT IN TABLE - data ");
-                    System.out.println("ROWS INSERTED - " + this.rows);
 
                 } catch (SQLException exception) {
 

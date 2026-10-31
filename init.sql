@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS data (
     temperature REAL,
     wind_speed_ms REAL,
     wind_speed_kmh REAL,
-    energy_generated REAL,
+    energy_mw REAL,
     PRIMARY KEY (id_device, created_at),
     FOREIGN KEY (id_device) REFERENCES devices(id_device)
 );

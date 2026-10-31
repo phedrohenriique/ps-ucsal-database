@@ -9,7 +9,7 @@ public class DataRow {
     Float temperature;
     Float wind_speed_ms;
     Float wind_speed_kmh;
-    Float energy_generated;
+    Float energy_mw;
 
     public DataRow(
             Integer id_device,
@@ -17,13 +17,13 @@ public class DataRow {
             Float temperature,
             Float wind_speed_ms,
             Float wind_speed_kmh,
-            Float energy_generated
+            Float energy_mw
     ) {
         this.id_device = id_device;
         this.created_at = created_at;
         this.temperature = temperature;
         this.wind_speed_ms = wind_speed_ms;
-        this.energy_generated = energy_generated;
+        this.energy_mw = energy_mw;
     }
 
     public Timestamp getCreated_at() {
@@ -31,7 +31,7 @@ public class DataRow {
     }
 
     public Float getEnergy_generated() {
-        return energy_generated;
+        return energy_mw;
     }
 
     public Integer getId_device() {
