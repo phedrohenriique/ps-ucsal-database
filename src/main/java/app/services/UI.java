@@ -7,6 +7,7 @@ import org.icepear.echarts.Bar;
 import app.configuration.AppConstants;
 import app.configuration.Configuration;
 import app.models.Device;
+import app.models.DeviceDataTimeSeries;
 import app.models.Plant;
 import io.javelit.components.layout.TabsComponent.Tabs;
 import io.javelit.core.Jt;
@@ -49,14 +50,19 @@ public class UI {
 
         Jt.title("Plants - Metrics").use();
 
+
+        Jt.title("Plants - Device - Data/min").use();
+
         var metricsPlantForm = Jt.form().key("metricsPlantForm").use();
-        String metricsPlantId = Jt.textInput("id").key("metricsPlantId").use(metricsPlantForm);
+        String metricsPlantId = Jt.textInput("id - plant").key("metricsPlantId").use(metricsPlantForm);
+        String metricsDeviceId = Jt.textInput("id - device").key("metricsDeviceId").use(metricsPlantForm);
         boolean submittedMetricsPlantId = Jt.formSubmitButton("get metrics").key("submittedMetricsPlantId")
                 .use(metricsPlantForm); // add boxes for failure or success
 
         if (submittedMetricsPlantId) {
-            System.out.println("metricsPlantId" + metricsPlantId);
-            addHistogram(metricsPlantId);
+
+            addDeviceDataTimeSeriesHistogram(metricsDeviceId);
+            // addHistogram(metricsPlantId);
         }
 
     }
@@ -153,49 +159,39 @@ public class UI {
 
     }
 
-    public void addHistogram(String plantId) {
-        Jt.title("Average Data per Device").use();
+    public void addDeviceDataTimeSeriesHistogram(String deviceId){
 
-        // plantId = (plantId != null) ? plantId : "1";
-        Integer id = Integer.valueOf(plantId);
-        List<Device> devices = database.getDeviceListbyPlantId(id);
+        Jt.title("Plant - Device Data - 2026").use();
 
-        List<String> deviceNames = devices.stream().map(device -> Integer.toString(device.getId_device())).toList();
-        Integer size = deviceNames.size();
+        Integer id = Integer.valueOf(deviceId);
+        List<DeviceDataTimeSeries> deviceTimeSeries = database.getDeviceDataTimeSeriesList(id);
 
-        String[] deviceNamesConverted = new String[size];
-        Number[] mockDataSpeed = new Number[size];
-        Number[] mockDataEnergy = new Number[size];
+        System.out.println(deviceTimeSeries.size());
 
-        int i = 0;
-        for (String name : deviceNames) {
+        List<String> deviceTrMin = deviceTimeSeries.stream().map(device -> "").toList();
+        List<Float> deviceTemperature = deviceTimeSeries.stream().map(device -> device.getAvgTemperature()).toList();
+        List<Float> deviceWindSpeed = deviceTimeSeries.stream().map(device -> device.getAvgWindSpeedMs()).toList();
+        List<Float> deviceEnergy = deviceTimeSeries.stream().map(device -> device.getAvgEnergyMw()).toList();
 
-            deviceNamesConverted[i] = name;
-            i++;
-        }
+        String[] deviceTrMinArray = deviceTrMin.toArray(new String[0]);
+        Number[] deviceTemperatureArray = deviceTemperature.toArray(new Number[0]);
+        Number[] deviceWindSpeedArray = deviceWindSpeed.toArray(new Number[0]);
+        Number[] deviceEnergyArray = deviceEnergy.toArray(new Number[0]);
 
-        int j = 0;
-        for (String _ : deviceNames) {
-            mockDataEnergy[j] = Math.random() * 300 + 100;
-            j++;
-        }
-
-        int k = 0;
-        for (String _ : deviceNames) {
-            mockDataSpeed[k] = Math.random() * 100 + 10;
-            k++;
-        }
+        // the series can be clicked
+        // better interaction
 
         Bar bar = new Bar()
                 .setLegend()
                 .setTooltip("item")
-                .addXAxis(deviceNamesConverted)
+                .addXAxis(deviceTrMinArray)
                 .addYAxis()
-                // .addSeries("2015", new Number[]{43.3, 83.1, 86.4, 72.4})
-                .addSeries("Wind Speed m/s - 2026", mockDataSpeed)
-                .addSeries("Energy Kw/h - 2026", mockDataEnergy);
+                .addSeries("temperature", deviceTemperatureArray)
+                .addSeries("wind_speed_ms", deviceWindSpeedArray)
+                .addSeries("energy_mw", deviceEnergyArray);
 
-        Jt.echarts(bar).use();
+        Jt.echarts(bar).key("chartTemperature").use();
+
     }
 
     // FORMS
