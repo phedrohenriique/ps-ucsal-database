@@ -29,4 +29,26 @@ public class DeviceUpdate {
         this.statusDevice = statusDevice;
     }
 
+    public Integer getIdDevice() {
+        return idDevice;
+    }
+
+    public Integer getIdPlant() {
+        return idPlant;
+    }
+
+    public String getModelDevice() {
+        return modelDevice;
+    }
+
+    public Status getStatusDevice() {
+        return statusDevice;
+    }
+
+    public String getTypeDevice() {
+        return typeDevice;
+    }
+
+    
+
 }

@@ -9,8 +9,10 @@ import app.configuration.Configuration;
 import app.models.Device;
 import app.models.DeviceCreate;
 import app.models.DeviceDataTimeSeries;
+import app.models.DeviceUpdate;
 import app.models.Plant;
 import app.models.PlantCreate;
+import app.models.PlantUpdate;
 import io.javelit.components.layout.TabsComponent.Tabs;
 import io.javelit.core.Jt;
 
@@ -225,6 +227,8 @@ public class UI {
         boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant);
 
         if (submittedUpdate) {
+            PlantUpdate plantUpdate = new PlantUpdate(Integer.valueOf(idPlantUpdate), namePlantUpdate, companyPlantUpdate, locationPlantUpdate, locationStatePlantUpdate);
+            database.updatePlant(plantUpdate);
             Jt.success("plant updated").key("tooltipSuccessUpdate").use();
         }
     }
@@ -275,14 +279,18 @@ public class UI {
                 .use(formCreateDevice);
         String typeDeviceUpdate = Jt.textInput("type").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "type")
                 .use(formCreateDevice);
-        String StatusDeviceUpdate = Jt.textInput("status").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "status")
-                .use(formCreateDevice);
+        // String StatusDeviceUpdate = Jt.textInput("status").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "status")
+        //         .use(formCreateDevice);
+        String StatusDeviceUpdate = Jt.selectbox("status",
+                List.of("ACTIVE", "STOPPED", "MAINTENANCE", "DEPRECATED")).key(AppConstants.KEY_DEVICE_FORM_UPDATE + "status").use(formCreateDevice);
 
-        boolean submittedUpdate = Jt.formSubmitButton("Create Plant")
+        boolean submittedUpdate = Jt.formSubmitButton("Update Plant")
                 .key(AppConstants.KEY_DEVICE_FORM_UPDATE + "button").use(formCreateDevice);
 
         if (submittedUpdate) {
-            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
+            DeviceUpdate deviceUpdate = new DeviceUpdate(Integer.valueOf(idDeviceUpdate), Integer.valueOf(idPlantUpdate), modelDeviceUpdate, typeDeviceUpdate, DeviceUpdate.Status.valueOf(StatusDeviceUpdate));
+            database.updateDevice(deviceUpdate);
+            Jt.success("device updated").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
         }
 
     }

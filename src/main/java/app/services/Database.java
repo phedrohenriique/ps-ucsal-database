@@ -13,8 +13,10 @@ import app.configuration.Configuration;
 import app.models.Device;
 import app.models.DeviceCreate;
 import app.models.DeviceDataTimeSeries;
+import app.models.DeviceUpdate;
 import app.models.Plant;
 import app.models.PlantCreate;
+import app.models.PlantUpdate;
 
 public class Database {
 
@@ -198,12 +200,58 @@ public class Database {
 
     }
 
-    public void updatePlant() {
+    public void updatePlant(PlantUpdate plant) {
+
+        String sql = new DataSQL().updatePlant();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setString(1, plant.getNamePlant());
+                    stmt.setString(2, plant.getCompanyPlant());
+                    stmt.setString(3, plant.getLocationStatePlant());
+                    stmt.setString(4, plant.getLocationPlant());
+                    stmt.setInt(5, plant.getIdPlant());
+
+                    stmt.executeUpdate();
+
+                    System.out.println("UPDATE TABLE - plants ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR UPDATE IN TABLE - plants : " + exception.getMessage());
+                }
 
     }
 
-    public void updateDevice() {
+    public void updateDevice(DeviceUpdate device) {
+        String sql = new DataSQL().updateDevice();
 
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setString(1, device.getModelDevice());
+                    stmt.setString(2, device.getTypeDevice());
+                    stmt.setString(3, device.getStatusDevice().name());
+                    stmt.setInt(4, device.getIdPlant());
+                    stmt.setInt(5, device.getIdDevice());
+
+                    stmt.executeUpdate();
+
+                    System.out.println("UPDATE TABLE - devices ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR UPDATE IN TABLE - devices : " + exception.getMessage());
+                }
     }
 
 }

@@ -21,4 +21,25 @@ public class PlantUpdate {
         this.locationStatePlant = locationStatePlant;
         this.locationPlant = locationPlant;
     }
+
+    public String getCompanyPlant() {
+        return companyPlant;
+    }
+
+    public Integer getIdPlant() {
+        return idPlant;
+    }
+
+    public String getLocationPlant() {
+        return locationPlant;
+    }
+
+    public String getLocationStatePlant() {
+        return locationStatePlant;
+    }
+
+    public String getNamePlant() {
+        return namePlant;
+    }
+
 }

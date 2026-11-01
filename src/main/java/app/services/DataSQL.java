@@ -86,10 +86,10 @@ public class DataSQL {
         String sql = """
             UPDATE plants 
             SET 
-                name_plant = COALESCE(?, name_plant),
-                company_plant = COALESCE(?, company_plant),
-                location_state_plant = COALESCE(?, location_state_plant),
-                location_plant = COALESCE(?, location_plant)
+                name_plant = COALESCE(NULLIF(?, ''), name_plant),
+                company_plant = COALESCE(NULLIF(?, ''), company_plant),
+                location_state_plant = COALESCE(NULLIF(?, ''), location_state_plant),
+                location_plant = COALESCE(NULLIF(?, ''), location_plant)
             WHERE id_plant=?;
         """;
 
@@ -100,9 +100,9 @@ public class DataSQL {
         String sql = """
             UPDATE devices 
             SET 
-                model_device = COALESCE(?, name_plant),
-                type_device = COALESCE(?, company_plant),
-                status_device = COALESCE(?, location_state_plant)
+                model_device = COALESCE(NULLIF(?, ''), model_device),
+                type_device = COALESCE(NULLIF(?, ''), type_device),
+                status_device = COALESCE(NULLIF(?, ''), status_device)
             WHERE id_plant=? AND id_device=?;
         """;
 
