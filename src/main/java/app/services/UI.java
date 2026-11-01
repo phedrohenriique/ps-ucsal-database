@@ -7,8 +7,10 @@ import org.icepear.echarts.Bar;
 import app.configuration.AppConstants;
 import app.configuration.Configuration;
 import app.models.Device;
+import app.models.DeviceCreate;
 import app.models.DeviceDataTimeSeries;
 import app.models.Plant;
+import app.models.PlantCreate;
 import io.javelit.components.layout.TabsComponent.Tabs;
 import io.javelit.core.Jt;
 
@@ -49,7 +51,6 @@ public class UI {
         tablePlantsList(plantsList);
 
         Jt.title("Plants - Metrics").use();
-
 
         Jt.title("Plants - Device - Data/min").use();
 
@@ -149,7 +150,6 @@ public class UI {
         if (Jt.sessionState().get("deviceId") == null | Jt.sessionState().get("plantId") == null) {
             Jt.warning("device Id and plant Id are required - go to Devices page or /devices").use();
         }
-        
 
         if (Jt.sessionState().get("deviceId") != null & Jt.sessionState().get("plantId") != null) {
             Jt.success("device detail retrieved for deviceId:" + Jt.sessionState().getString("deviceId") + " plantId: " + Jt.sessionState().getString("plantId"))
@@ -159,7 +159,7 @@ public class UI {
 
     }
 
-    public void addDeviceDataTimeSeriesHistogram(String deviceId){
+    public void addDeviceDataTimeSeriesHistogram(String deviceId) {
 
         Jt.title("Plant - Device Data - 2026").use();
 
@@ -180,7 +180,6 @@ public class UI {
 
         // the series can be clicked
         // better interaction
-
         Bar bar = new Bar()
                 .setLegend()
                 .setTooltip("item")
@@ -207,6 +206,8 @@ public class UI {
         boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant);
 
         if (submittedCreate) {
+            PlantCreate plantCreate = new PlantCreate(namePlantCreate, companyPlantCreate, locationPlantCreate, locationStatePlantCreate);
+            database.createPlant(plantCreate);
             Jt.success("plant created").key("tooltipSuccessCreate").use();
         }
 
@@ -256,6 +257,8 @@ public class UI {
         // success
 
         if (submittedCreate) {
+            DeviceCreate deviceCreate = new DeviceCreate(Integer.valueOf(idPlantCreate), modelDeviceCreate, typeDeviceCreate);
+            database.createDevice(deviceCreate);
             Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_CREATE + "tooltip").use();
         }
     }

@@ -11,8 +11,10 @@ import java.util.List;
 
 import app.configuration.Configuration;
 import app.models.Device;
+import app.models.DeviceCreate;
 import app.models.DeviceDataTimeSeries;
 import app.models.Plant;
+import app.models.PlantCreate;
 
 public class Database {
 
@@ -143,11 +145,56 @@ public class Database {
 
     }
 
-    public void createPlant() {
+    public void createPlant(PlantCreate plant) {
+
+        String sql = new DataSQL().createPlant();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setString(1, plant.getNamePlant());
+                    stmt.setString(2, plant.getCompanyPlant());
+                    stmt.setString(3, plant.getLocationStatePlant());
+                    stmt.setString(4, plant.getLocationPlant());
+
+                    stmt.executeUpdate();
+
+                    System.out.println("INSERT TABLE - plants ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR INSERT IN TABLE - plants : " + exception.getMessage());
+                }
 
     }
 
-    public void createDevice() {
+    public void createDevice(DeviceCreate device) {
+
+        String sql = new DataSQL().createDevice();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setInt(1, device.getIdPlant());
+                    stmt.setString(2, device.getModelDevice());
+                    stmt.setString(3, device.getTypeDevice());
+
+                    stmt.executeUpdate();
+
+                    System.out.println("INSERT TABLE - devices ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+                }
 
     }
 

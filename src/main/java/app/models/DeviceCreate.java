@@ -16,4 +16,16 @@ public class DeviceCreate {
         this.typeDevice = typeDevice;
     }
 
+    public Integer getIdPlant() {
+        return idPlant;
+    }
+
+    public String getModelDevice() {
+        return modelDevice;
+    }
+
+    public String getTypeDevice() {
+        return typeDevice;
+    }
+
 }

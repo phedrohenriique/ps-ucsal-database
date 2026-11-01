@@ -18,4 +18,21 @@ public class PlantCreate {
         this.locationStatePlant = locationStatePlant;
         this.locationPlant = locationPlant;
     }
+
+    public String getNamePlant() {
+        return namePlant;
+    }
+
+    public String getCompanyPlant() {
+        return companyPlant;
+    }
+
+    public String getLocationPlant() {
+        return locationPlant;
+    }
+
+    public String getLocationStatePlant() {
+        return locationStatePlant;
+    }
+
 }
