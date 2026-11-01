@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS devices (
             'MAINTENANCE',
             'DEPRECATED'
         )),
-    FOREIGN KEY (id_plant) REFERENCES plants(id_plant)
+    FOREIGN KEY (id_plant) REFERENCES plants(id_plant) --ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS data (
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS data (
     wind_speed_kmh REAL,
     energy_mw REAL,
     PRIMARY KEY (id_device, created_at),
-    FOREIGN KEY (id_device) REFERENCES devices(id_device)
+    FOREIGN KEY (id_device) REFERENCES devices(id_device) --ON DELETE CASCADE
 );
 
 -- 2. Insert plants only if their unique locations are not already present.

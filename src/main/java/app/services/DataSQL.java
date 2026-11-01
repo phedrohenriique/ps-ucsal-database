@@ -112,6 +112,27 @@ public class DataSQL {
     public String deletePlant() {
         String sql = """
 
+        BEGIN;
+
+        -- 1. DELETE DATA FROM DEVICES
+
+        DELETE FROM data
+        USING devices
+        WHERE data.id_device = devices.id_device
+        AND devices.id_plant=?;
+        
+        -- 2. DELETE DEVICES
+
+        DELETE FROM devices
+        WHERE id_plant=?;
+        
+        -- DELETE PLANTS
+
+        DELETE FROM plants
+        WHERE id_plant=?;
+
+        COMMIT;
+
         """;
 
         return sql;
@@ -119,6 +140,16 @@ public class DataSQL {
 
     public String deleteDevice() {
         String sql = """
+
+        BEGIN;
+
+            DELETE FROM data
+            WHERE id_device=?;
+
+            DELETE FROM devices
+            WHERE id_device=?;
+        
+        COMMIT;
 
         """;
 

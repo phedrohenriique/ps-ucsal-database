@@ -43,29 +43,38 @@ public class UI {
 
         Jt.title("Plants Info").use();
 
-        List<Plant> plantsList = database.getPlantList();
+        try {
 
-        if (plantsList == null || plantsList.isEmpty()) {
-            Jt.warning("No plants found in the database.").use();
-            return;
-        }
+            List<Plant> plantsList = database.getPlantList();
 
-        tablePlantsList(plantsList);
+            if (plantsList == null || plantsList.isEmpty()) {
+                Jt.warning("No plants found in the database.").use();
+                return;
+            }
 
-        Jt.title("Plants - Metrics").use();
+            tablePlantsList(plantsList);
 
-        Jt.title("Plants - Device - Data/min").use();
+            Jt.title("Plants - Metrics").use();
 
-        var metricsPlantForm = Jt.form().key("metricsPlantForm").use();
-        String metricsPlantId = Jt.textInput("id - plant").key("metricsPlantId").use(metricsPlantForm);
-        String metricsDeviceId = Jt.textInput("id - device").key("metricsDeviceId").use(metricsPlantForm);
-        boolean submittedMetricsPlantId = Jt.formSubmitButton("get metrics").key("submittedMetricsPlantId")
-                .use(metricsPlantForm); // add boxes for failure or success
+            Jt.title("Plants - Device - Data/min").use();
 
-        if (submittedMetricsPlantId) {
+            var metricsPlantForm = Jt.form().key("metricsPlantForm").use();
+            String metricsPlantId = Jt.textInput("id - plant").key("metricsPlantId").use(metricsPlantForm);
+            String metricsDeviceId = Jt.textInput("id - device").key("metricsDeviceId").use(metricsPlantForm);
+            boolean submittedMetricsPlantId = Jt.formSubmitButton("get metrics").key("submittedMetricsPlantId")
+                    .use(metricsPlantForm); // add boxes for failure or success
 
-            addDeviceDataTimeSeriesHistogram(metricsDeviceId);
-            // addHistogram(metricsPlantId);
+            if (submittedMetricsPlantId) {
+
+                addDeviceDataTimeSeriesHistogram(metricsDeviceId);
+                // addHistogram(metricsPlantId);
+            }
+
+        } catch (Exception exception) {
+
+            Jt.error("ERROR").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
+            System.out.println(exception.getMessage());
+
         }
 
     }
@@ -74,60 +83,64 @@ public class UI {
 
         Jt.title("Devices Info").use();
 
-        // Jt.text(body)("Devices Info").use();
-        List<Plant> plantsList = database.getPlantList();
+        try {
 
-        if (plantsList == null || plantsList.isEmpty()) {
-            Jt.warning("No plants found in the database.").use();
-            return;
-        }
+            List<Plant> plantsList = database.getPlantList();
 
-        tablePlantsList(plantsList);
-
-        Jt.title("Device List from Plant").use();
-
-        var getDeviceListByPlantForm = Jt.form().key("getDeviceListByPlant").use();
-        String plantId = Jt.textInput("id").key("plantId").use(getDeviceListByPlantForm);
-        boolean submittedDeviceList = Jt.formSubmitButton("Get Device List").key("submittedDeviceList")
-                .use(getDeviceListByPlantForm); // add boxes for failure or success
-
-        // process first form
-        if (submittedDeviceList) {
-            Integer plantIdValue = Integer.valueOf(plantId);
-            List<Device> deviceList = database.getDeviceListbyPlantId(plantIdValue);
-            Jt.sessionState().put("deviceList", deviceList);
-            Jt.sessionState().put("selectedPlantId", plantIdValue);
-        }
-
-        if (Jt.sessionState().get("deviceList") != null) {
-
-            List<Device> deviceList = (List<Device>) Jt.sessionState().get("deviceList");
-
-            tableDevicesList(deviceList);
-
-            Jt.title("Device Detail").use();
-
-            var getDeviceDetailForm = Jt.form().key("getDeviceDetail").use();
-            String deviceIdDetail = Jt.textInput("id device").key("deviceIdDetail").use(getDeviceDetailForm);
-            String plantIdDetail = Jt.textInput("id plant").key("plantIdDetail").use(getDeviceDetailForm);
-            boolean submittedDeviceDetail = Jt.formSubmitButton("Device Detail").key("submittedDeviceDetail")
-                    .use(getDeviceDetailForm); // add boxes for failure or success
-
-            if (submittedDeviceDetail) {
-
-                Jt.sessionState().put("deviceId", deviceIdDetail);
-                Jt.sessionState().put("plantId", plantIdDetail);
-                Jt.switchPage("/device-details");
+            if (plantsList == null || plantsList.isEmpty()) {
+                Jt.warning("No plants found in the database.").use();
+                return;
             }
 
+            tablePlantsList(plantsList);
+
+            Jt.title("Device List from Plant").use();
+
+            var getDeviceListByPlantForm = Jt.form().key("getDeviceListByPlant").use();
+            String plantId = Jt.textInput("id").key("plantId").use(getDeviceListByPlantForm);
+            boolean submittedDeviceList = Jt.formSubmitButton("Get Device List").key("submittedDeviceList")
+                    .use(getDeviceListByPlantForm); // add boxes for failure or success
+
+            // process first form
+            if (submittedDeviceList) {
+                Integer plantIdValue = Integer.valueOf(plantId);
+                List<Device> deviceList = database.getDeviceListbyPlantId(plantIdValue);
+                Jt.sessionState().put("deviceList", deviceList);
+                Jt.sessionState().put("selectedPlantId", plantIdValue);
+            }
+
+            if (Jt.sessionState().get("deviceList") != null) {
+
+                List<Device> deviceList = (List<Device>) Jt.sessionState().get("deviceList");
+
+                tableDevicesList(deviceList);
+
+                Jt.title("Device Detail").use();
+
+                var getDeviceDetailForm = Jt.form().key("getDeviceDetail").use();
+                String deviceIdDetail = Jt.textInput("id device").key("deviceIdDetail").use(getDeviceDetailForm);
+                String plantIdDetail = Jt.textInput("id plant").key("plantIdDetail").use(getDeviceDetailForm);
+                boolean submittedDeviceDetail = Jt.formSubmitButton("Device Detail").key("submittedDeviceDetail")
+                        .use(getDeviceDetailForm); // add boxes for failure or success
+
+                if (submittedDeviceDetail) {
+
+                    Jt.sessionState().put("deviceId", deviceIdDetail);
+                    Jt.sessionState().put("plantId", plantIdDetail);
+                    Jt.switchPage("/device-details");
+                }
+
+            }
+
+        } catch (Exception exception) {
         }
 
     }
 
     public void pageOperations() {
-        Jt.title("OPERATIONS").use();
+        Jt.title("Operations").use();
 
-        Jt.title("PLANT").use();
+        Jt.title("Plant - Management").use();
 
         var tabsPlant = Jt.tabs(List.of("Create", "Update", "Delete")).key("tabsPlant").use();
 
@@ -137,7 +150,7 @@ public class UI {
         formDeletePlant(tabsPlant);
 
         // DEVICE - FORMS
-        Jt.title("DEVICE").use();
+        Jt.title("Device - Management").use();
 
         var tabsDevice = Jt.tabs(List.of("Create", "Update", "Delete")).key("tabsDevice").use();
 
@@ -165,33 +178,38 @@ public class UI {
 
         Jt.title("Plant - Device Data - 2026").use();
 
-        Integer id = Integer.valueOf(deviceId);
-        List<DeviceDataTimeSeries> deviceTimeSeries = database.getDeviceDataTimeSeriesList(id);
+        try {
 
-        System.out.println(deviceTimeSeries.size());
+            Integer id = Integer.valueOf(deviceId);
+            List<DeviceDataTimeSeries> deviceTimeSeries = database.getDeviceDataTimeSeriesList(id);
 
-        List<String> deviceTrMin = deviceTimeSeries.stream().map(device -> "").toList();
-        List<Float> deviceTemperature = deviceTimeSeries.stream().map(device -> device.getAvgTemperature()).toList();
-        List<Float> deviceWindSpeed = deviceTimeSeries.stream().map(device -> device.getAvgWindSpeedMs()).toList();
-        List<Float> deviceEnergy = deviceTimeSeries.stream().map(device -> device.getAvgEnergyMw()).toList();
+            System.out.println(deviceTimeSeries.size());
 
-        String[] deviceTrMinArray = deviceTrMin.toArray(new String[0]);
-        Number[] deviceTemperatureArray = deviceTemperature.toArray(new Number[0]);
-        Number[] deviceWindSpeedArray = deviceWindSpeed.toArray(new Number[0]);
-        Number[] deviceEnergyArray = deviceEnergy.toArray(new Number[0]);
+            List<String> deviceTrMin = deviceTimeSeries.stream().map(device -> "").toList();
+            List<Float> deviceTemperature = deviceTimeSeries.stream().map(device -> device.getAvgTemperature()).toList();
+            List<Float> deviceWindSpeed = deviceTimeSeries.stream().map(device -> device.getAvgWindSpeedMs()).toList();
+            List<Float> deviceEnergy = deviceTimeSeries.stream().map(device -> device.getAvgEnergyMw()).toList();
 
-        // the series can be clicked
-        // better interaction
-        Bar bar = new Bar()
-                .setLegend()
-                .setTooltip("item")
-                .addXAxis(deviceTrMinArray)
-                .addYAxis()
-                .addSeries("temperature", deviceTemperatureArray)
-                .addSeries("wind_speed_ms", deviceWindSpeedArray)
-                .addSeries("energy_mw", deviceEnergyArray);
+            String[] deviceTrMinArray = deviceTrMin.toArray(new String[0]);
+            Number[] deviceTemperatureArray = deviceTemperature.toArray(new Number[0]);
+            Number[] deviceWindSpeedArray = deviceWindSpeed.toArray(new Number[0]);
+            Number[] deviceEnergyArray = deviceEnergy.toArray(new Number[0]);
 
-        Jt.echarts(bar).key("chartTemperature").use();
+            // the series can be clicked
+            // better interaction
+            Bar bar = new Bar()
+                    .setLegend()
+                    .setTooltip("item")
+                    .addXAxis(deviceTrMinArray)
+                    .addYAxis()
+                    .addSeries("temperature", deviceTemperatureArray)
+                    .addSeries("wind_speed_ms", deviceWindSpeedArray)
+                    .addSeries("energy_mw", deviceEnergyArray);
+
+            Jt.echarts(bar).key("chartTemperature").use();
+
+        } catch (Exception exception) {
+        }
 
     }
 
@@ -208,9 +226,19 @@ public class UI {
         boolean submittedCreate = Jt.formSubmitButton("Create Plant").key("formButtonCreate").use(formCreatePlant);
 
         if (submittedCreate) {
-            PlantCreate plantCreate = new PlantCreate(namePlantCreate, companyPlantCreate, locationPlantCreate, locationStatePlantCreate);
-            database.createPlant(plantCreate);
-            Jt.success("plant created").key("tooltipSuccessCreate").use();
+
+            try {
+
+                formCreatePlantCheck(namePlantCreate, companyPlantCreate, locationStatePlantCreate, locationPlantCreate);
+
+                PlantCreate plantCreate = new PlantCreate(namePlantCreate, companyPlantCreate, locationPlantCreate, locationStatePlantCreate);
+                database.createPlant(plantCreate);
+                Jt.success("SUCCESS").key("tooltipSuccessCreate").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key("tooltipErrorCrate").use();
+                System.out.println(exception.getMessage());
+            }
         }
 
     }
@@ -227,9 +255,18 @@ public class UI {
         boolean submittedUpdate = Jt.formSubmitButton("Update Plant").key("formButtonUpdate").use(formUpdatePlant);
 
         if (submittedUpdate) {
-            PlantUpdate plantUpdate = new PlantUpdate(Integer.valueOf(idPlantUpdate), namePlantUpdate, companyPlantUpdate, locationPlantUpdate, locationStatePlantUpdate);
-            database.updatePlant(plantUpdate);
-            Jt.success("plant updated").key("tooltipSuccessUpdate").use();
+
+            try {
+
+                PlantUpdate plantUpdate = new PlantUpdate(Integer.valueOf(idPlantUpdate), namePlantUpdate, companyPlantUpdate, locationPlantUpdate, locationStatePlantUpdate);
+                database.updatePlant(plantUpdate);
+                Jt.success("SUCCESS").key("tooltipSuccessUpdate").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key("tooltipSuccessUpdate").use();
+                System.out.println(exception.getMessage());
+            }
+
         }
     }
 
@@ -241,7 +278,21 @@ public class UI {
         boolean submittedDelete = Jt.formSubmitButton("Delete Plant").key("formButtonDelete").use(formUpdatePlant);
 
         if (submittedDelete) {
-            Jt.success("plant deleted").key("tooltipSuccessDelete").use();
+
+            try {
+
+                if (idPlantDelete == null || idPlantDelete.isBlank()) {
+                    throw new Exception("Plant ID - NEED VALUE");
+                }
+
+                database.deletePlant(Integer.valueOf(idPlantDelete));
+                Jt.success("SUCCESS").key("tooltipSuccessDelete").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key("tooltipSuccessDelete").use();
+                System.out.println(exception.getMessage());
+            }
+
         }
     }
 
@@ -256,14 +307,22 @@ public class UI {
         String typeDeviceCreate = Jt.textInput("type").key(AppConstants.KEY_DEVICE_FORM_CREATE + "type")
                 .use(formCreateDevice);
 
-        boolean submittedCreate = Jt.formSubmitButton("Create Plant")
-                .key(AppConstants.KEY_DEVICE_FORM_CREATE + "button").use(formCreateDevice); // add boxes for failure or
-        // success
+        boolean submittedCreate = Jt.formSubmitButton("Create Device")
+                .key(AppConstants.KEY_DEVICE_FORM_CREATE + "button").use(formCreateDevice);
 
         if (submittedCreate) {
-            DeviceCreate deviceCreate = new DeviceCreate(Integer.valueOf(idPlantCreate), modelDeviceCreate, typeDeviceCreate);
-            database.createDevice(deviceCreate);
-            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_CREATE + "tooltip").use();
+            try {
+
+                formCreateDeviceCheck(idPlantCreate, modelDeviceCreate, typeDeviceCreate);
+
+                DeviceCreate deviceCreate = new DeviceCreate(Integer.valueOf(idPlantCreate), modelDeviceCreate, typeDeviceCreate);
+                database.createDevice(deviceCreate);
+                Jt.success("SUCCESS").key(AppConstants.KEY_DEVICE_FORM_CREATE + "tooltip").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key("tooltipSuccessDelete").use();
+                System.out.println(exception.getMessage());
+            }
         }
     }
 
@@ -284,13 +343,22 @@ public class UI {
         String StatusDeviceUpdate = Jt.selectbox("status",
                 List.of("ACTIVE", "STOPPED", "MAINTENANCE", "DEPRECATED")).key(AppConstants.KEY_DEVICE_FORM_UPDATE + "status").use(formCreateDevice);
 
-        boolean submittedUpdate = Jt.formSubmitButton("Update Plant")
+        boolean submittedUpdate = Jt.formSubmitButton("Update Device")
                 .key(AppConstants.KEY_DEVICE_FORM_UPDATE + "button").use(formCreateDevice);
 
         if (submittedUpdate) {
-            DeviceUpdate deviceUpdate = new DeviceUpdate(Integer.valueOf(idDeviceUpdate), Integer.valueOf(idPlantUpdate), modelDeviceUpdate, typeDeviceUpdate, DeviceUpdate.Status.valueOf(StatusDeviceUpdate));
-            database.updateDevice(deviceUpdate);
-            Jt.success("device updated").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
+
+            try {
+
+                DeviceUpdate deviceUpdate = new DeviceUpdate(Integer.valueOf(idDeviceUpdate), Integer.valueOf(idPlantUpdate), modelDeviceUpdate, typeDeviceUpdate, DeviceUpdate.Status.valueOf(StatusDeviceUpdate));
+                database.updateDevice(deviceUpdate);
+                Jt.success("SUCCESS").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key(AppConstants.KEY_DEVICE_FORM_UPDATE + "tooltip").use();
+                System.out.println(exception.getMessage());
+            }
+
         }
 
     }
@@ -301,20 +369,27 @@ public class UI {
 
         String idDeviceDelete = Jt.textInput("id - device").key(AppConstants.KEY_DEVICE_FORM_DELETE + "id")
                 .use(formDeleteDevice);
-        String idPlantDelete = Jt.textInput("id - plant").key(AppConstants.KEY_DEVICE_FORM_DELETE + "idPlant")
-                .use(formDeleteDevice);
 
-        boolean submittedDelete = Jt.formSubmitButton("Create Plant")
-                .key(AppConstants.KEY_DEVICE_FORM_DELETE + "button").use(formDeleteDevice); // add boxes for failure or
-        // success
+        boolean submittedDelete = Jt.formSubmitButton("Delete Device")
+                .key(AppConstants.KEY_DEVICE_FORM_DELETE + "button").use(formDeleteDevice);
 
         if (submittedDelete) {
-            Jt.success("device created").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
+
+            try {
+
+                if (idDeviceDelete == null || idDeviceDelete.isBlank()) {
+                    throw new Exception("Device ID - NEED VALUE");
+                }
+
+                database.deleteDevice(Integer.valueOf(idDeviceDelete));
+                Jt.success("SUCCESS").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
+
+            } catch (Exception exception) {
+                Jt.error("ERROR").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
+                System.out.println(exception.getMessage());
+            }
+
         }
-    }
-
-    public void getPlantHistogram() {
-
     }
 
     public void tablePlantsList(List<Plant> plantsList) {
@@ -332,6 +407,42 @@ public class UI {
                 .height(300)
                 .use();
         Jt.table(devicesList).use(tableContainer);
+    }
+
+    public void formCreatePlantCheck(String name, String company, String state, String location) throws Exception {
+
+        if (name == null || name.isBlank()) {
+            throw new Exception("Plant name - NEED VALUE");
+        }
+
+        if (company == null || company.isBlank()) {
+            throw new Exception("Plant company - NEED VALUE");
+        }
+
+        if (state == null || state.isBlank()) {
+            throw new Exception("Plant state - NEED VALUE");
+        }
+
+        if (location == null || location.isBlank()) {
+            throw new Exception("Plant location - NEED VALUE");
+        }
+
+    }
+
+    public void formCreateDeviceCheck(String idPlant, String model, String type) throws Exception {
+
+        if (idPlant == null || idPlant.isBlank()) {
+            throw new Exception("Plant ID - NEED VALUE");
+        }
+
+        if (model == null || model.isBlank()) {
+            throw new Exception("Device model - NEED VALUE");
+        }
+
+        if (type == null || type.isBlank()) {
+            throw new Exception("Device type - NEED VALUE");
+        }
+
     }
 
 }

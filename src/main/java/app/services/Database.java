@@ -38,7 +38,7 @@ public class Database {
         }
     }
 
-    public List<Plant> getPlantList() {
+    public List<Plant> getPlantList()  throws SQLException {
 
         List<Plant> listPlant = new ArrayList<>();
         String sql = new DataSQL().getPlantList();
@@ -66,13 +66,14 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
                 }
 
                 return listPlant;
 
     }
 
-    public List<Device> getDeviceListbyPlantId(Integer id) {
+    public List<Device> getDeviceListbyPlantId(Integer id) throws SQLException {
 
         List<Device> listDevice = new ArrayList<>();
         String sql = new DataSQL().getDeviceListByPlantId();
@@ -104,13 +105,14 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
                 }
 
                 return listDevice;
 
     }
 
-    public List<DeviceDataTimeSeries> getDeviceDataTimeSeriesList(Integer IdDevice) {
+    public List<DeviceDataTimeSeries> getDeviceDataTimeSeriesList(Integer IdDevice) throws SQLException {
 
         List<DeviceDataTimeSeries> deviceDataList = new ArrayList<>();
         String sql = new DataSQL().getDeviceDataTimeSeries();
@@ -141,13 +143,14 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
                 }
 
                 return deviceDataList;
 
     }
 
-    public void createPlant(PlantCreate plant) {
+    public void createPlant(PlantCreate plant) throws SQLException {
 
         String sql = new DataSQL().createPlant();
 
@@ -170,11 +173,12 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR INSERT IN TABLE - plants : " + exception.getMessage());
+                    throw exception;
                 }
 
     }
 
-    public void createDevice(DeviceCreate device) {
+    public void createDevice(DeviceCreate device) throws SQLException {
 
         String sql = new DataSQL().createDevice();
 
@@ -196,11 +200,12 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
                 }
 
     }
 
-    public void updatePlant(PlantUpdate plant) {
+    public void updatePlant(PlantUpdate plant) throws SQLException {
 
         String sql = new DataSQL().updatePlant();
 
@@ -224,11 +229,12 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR UPDATE IN TABLE - plants : " + exception.getMessage());
+                    throw exception;
                 }
 
     }
 
-    public void updateDevice(DeviceUpdate device) {
+    public void updateDevice(DeviceUpdate device) throws SQLException {
         String sql = new DataSQL().updateDevice();
 
         try (
@@ -251,6 +257,59 @@ public class Database {
                 } catch (SQLException exception) {
 
                     System.out.println("ERROR UPDATE IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
+                }
+    }
+
+    public void deletePlant(Integer idPlant) throws SQLException {
+
+        String sql = new DataSQL().deletePlant();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setInt(1, idPlant);
+                    stmt.setInt(2, idPlant);
+                    stmt.setInt(3, idPlant);
+
+                    stmt.executeUpdate();
+
+                    System.out.println("DELETE TABLE - plants ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR UPDATE IN TABLE - plants : " + exception.getMessage());
+                    throw exception;
+
+                }
+
+    }
+
+    public void deleteDevice(Integer idDevice) throws SQLException {
+        String sql = new DataSQL().deleteDevice();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setInt(1, idDevice);
+                    stmt.setInt(2, idDevice);
+
+                    stmt.executeUpdate();
+
+                    System.out.println("DELETE TABLE - devices ");
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR UPDATE IN TABLE - devices : " + exception.getMessage());
+                    throw exception;
                 }
     }
 
