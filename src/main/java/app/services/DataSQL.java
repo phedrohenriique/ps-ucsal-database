@@ -53,4 +53,76 @@ public class DataSQL {
         return sql;
     }
 
+    public String createPlant() {
+        String sql = """
+            INSERT INTO plants (
+                name_plant,
+                company_plant,
+                location_state_plant,
+                location_plant
+            )
+            VALUES
+                (?, ?, ?, ?);
+        """;
+
+        return sql;
+    }
+
+    public String createDevice() {
+        String sql = """
+            INSERT INTO devices (
+                id_plant,
+                model_device,
+                type_device
+            )
+            VALUES
+                (?, ?, ?);
+        """;
+
+        return sql;
+    }
+
+    public String updatePlant() {
+        String sql = """
+            UPDATE plants 
+            SET 
+                name_plant = COALESCE(?, name_plant),
+                company_plant = COALESCE(?, company_plant),
+                location_state_plant = COALESCE(?, location_state_plant),
+                location_plant = COALESCE(?, location_plant)
+            WHERE id_plant=?;
+        """;
+
+        return sql;
+    }
+
+    public String updateDevice() {
+        String sql = """
+            UPDATE devices 
+            SET 
+                model_device = COALESCE(?, name_plant),
+                type_device = COALESCE(?, company_plant),
+                status_device = COALESCE(?, location_state_plant)
+            WHERE id_plant=? AND id_device=?;
+        """;
+
+        return sql;
+    }
+
+    public String deletePlant() {
+        String sql = """
+
+        """;
+
+        return sql;
+    }
+
+    public String deleteDevice() {
+        String sql = """
+
+        """;
+
+        return sql;
+    }
+
 }

@@ -11,57 +11,57 @@ public class Device {
         DEPRECATED
     }
 
-    Integer id_device;
-    Integer id_plant;
-    String model_device;
-    String type_device;
-    Timestamp created_at;
-    Status status_device;
+    private Integer idDevice;
+    private Integer idPlant;
+    private String modelDevice;
+    private String typeDevice;
+    private Timestamp createdAt;
+    private Status statusDevice;
 
-    public Device (
-        Integer id_device, 
-        Integer id_plant, 
-        String model_device, 
-        String type_device, 
-        Timestamp created_at, 
-        Status status_device
-    ){
-        this.id_device = id_device;
-        this. id_plant = id_plant;
-        this.model_device = model_device;
-        this.type_device = type_device;
-        this.created_at = created_at;
-        this.status_device = status_device;
+    public Device(
+            Integer idDevice,
+            Integer idPlant,
+            String modelDevice,
+            String typeDevice,
+            Timestamp createdAt,
+            Status statusDevice
+    ) {
+        this.idDevice = idDevice;
+        this.idPlant = idPlant;
+        this.modelDevice = modelDevice;
+        this.typeDevice = typeDevice;
+        this.createdAt = createdAt;
+        this.statusDevice = statusDevice;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
-        return "(id_device="+this.id_device+",id_plant="+this.id_plant+",status_device="+this.status_device+")";
+        return "(idDevice=" + this.idDevice + ",idPlant=" + this.idPlant + ",statusDevice=" + this.statusDevice + ")";
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public Integer getId_device() {
-        return id_device;
+    public Integer getIdDevice() {
+        return idDevice;
     }
 
-    public Integer getId_plant() {
-        return id_plant;
+    public Integer getIdPlant() {
+        return idPlant;
     }
 
-    public String getName_device() {
-        return model_device;
+    public String getNameDevice() {
+        return modelDevice;
     }
 
-    public Status getStatus_device() {
-        return status_device;
+    public Status getStatusDevice() {
+        return statusDevice;
     }
 
-    public String getType_device() {
-        return type_device;
+    public String getTypeDevice() {
+        return typeDevice;
     }
 
 }

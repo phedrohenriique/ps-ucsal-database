@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,34 +112,50 @@ public class Database {
         String sql = new DataSQL().getDeviceDataTimeSeries();
 
         try (
-            Connection connection = DriverManager.getConnection(
-                    this.configuration.getDbUrl(),
-                    this.configuration.getDbUser(),
-                    this.configuration.getDbPassword()
-            ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
 
-                stmt.setInt(1, IdDevice);
-                ResultSet result = stmt.executeQuery();
+                    stmt.setInt(1, IdDevice);
+                    ResultSet result = stmt.executeQuery();
 
-                while (result.next()) {
-                    DeviceDataTimeSeries data = new DeviceDataTimeSeries(
-                            result.getInt("id_device"),
-                            result.getTimestamp("tr_min"),
-                            result.getFloat("avg_temperature"),
-                            result.getFloat("avg_wind_speed"),
-                            result.getFloat("avg_energy")
-                    );
-                    deviceDataList.add(data);
+                    while (result.next()) {
+                        DeviceDataTimeSeries data = new DeviceDataTimeSeries(
+                                result.getInt("id_device"),
+                                result.getTimestamp("tr_min"),
+                                result.getFloat("avg_temperature"),
+                                result.getFloat("avg_wind_speed"),
+                                result.getFloat("avg_energy")
+                        );
+                        deviceDataList.add(data);
+                    }
+
+                    System.out.println("ROWS RETRIEVED - " + deviceDataList.size());
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
                 }
 
-                System.out.println("ROWS RETRIEVED - " + deviceDataList.size());
+                return deviceDataList;
 
-            } catch (SQLException exception) {
+    }
 
-                System.out.println("ERROR INSERT IN TABLE - devices : " + exception.getMessage());
-            }
+    public void createPlant() {
 
-            return deviceDataList;
+    }
+
+    public void createDevice() {
+
+    }
+
+    public void updatePlant() {
+
+    }
+
+    public void updateDevice() {
 
     }
 

@@ -2,44 +2,49 @@ package app.models;
 
 public class Plant {
 
-    Integer id_plant;
-    String name_plant;
-    String company_plant;
-    String location_state_plant;
-    String location_plant;
+    private Integer idPlant;
+    private String namePlant;
+    private String companyPlant;
+    private String locationStatePlant;
+    private String locationPlant;
 
-    public Plant(Integer id, String name, String company, String location_state, String location){
-        this.id_plant = id;
-        this.name_plant = name;
-        this.company_plant = company;
-        this.location_state_plant = location_state;
-        this. location_plant = location;
+    public Plant(
+            Integer idPlant,
+            String namePlant,
+            String companyPlant,
+            String locationStatePlant,
+            String locationPlant
+    ) {
+        this.idPlant = idPlant;
+        this.namePlant = namePlant;
+        this.companyPlant = companyPlant;
+        this.locationStatePlant = locationStatePlant;
+        this.locationPlant = locationPlant;
     }
 
-    public Integer getId_plant() {
-        return id_plant;
+    public Integer getIdPlant() {
+        return idPlant;
     }
 
-    public String getLocation_plant() {
-        return location_plant;
+    public String getLocationPlant() {
+        return locationPlant;
     }
 
-    public String getLocation_state_plant() {
-        return location_state_plant;
+    public String getLocationStatePlant() {
+        return locationStatePlant;
     }
 
-    public String getName_plant() {
-        return name_plant;
+    public String getNamePlant() {
+        return namePlant;
     }
 
-    public String getCompany_plant() {
-        return company_plant;
+    public String getCompanyPlant() {
+        return companyPlant;
     }
 
     @Override
-    public String toString(){
-        return "(id_plant="+this.id_plant+",id_name="+this.name_plant+")";
+    public String toString() {
+        return "(idPlant=" + this.idPlant + ",namePlant=" + this.namePlant + ")";
     }
 
 }
-
