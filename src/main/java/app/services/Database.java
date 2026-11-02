@@ -359,4 +359,40 @@ public class Database {
                 return plantInfo;
     }
 
+    public Device getDeviceInfoById(Integer id) throws SQLException {
+
+        Device deviceInfo = null;
+        String sql = new DataSQL().getDeviceInfoById();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setInt(1, id);
+                    ResultSet result = stmt.executeQuery();
+
+                    if (result.next()) {
+                        deviceInfo = new Device(
+                                result.getInt("id_device"),
+                                result.getInt("id_plant"),
+                                result.getString("model_device"),
+                                result.getString("type_device"),
+                                result.getTimestamp("created_at"),
+                                Device.Status.valueOf(result.getString("status_device"))
+                        );
+
+                    }
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR READ IN TABLE - plants : " + exception.getMessage());
+                    throw exception;
+                }
+
+                return deviceInfo;
+    }
+
 }

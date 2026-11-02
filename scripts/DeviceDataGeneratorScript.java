@@ -102,7 +102,8 @@ class Database {
 
                             this.rows++;
 
-                            Thread.sleep(2000); // Pause for 2000 milliseconds (2 seconds)
+                            Thread.sleep(1000); // Pause for 1000 milliseconds (1 seconds)
+                            
                         } catch (InterruptedException exception) {
                             System.out.println("ERROR: " + exception.getMessage());
                             Thread.currentThread().interrupt(); // Restore the interrupted status

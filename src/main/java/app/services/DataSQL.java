@@ -186,4 +186,14 @@ public class DataSQL {
         return sql;
     }
 
+    public String getDeviceInfoById() {
+        String sql = """
+            SELECT *
+            FROM devices
+            WHERE id_device=?;
+        """;
+
+        return sql;
+    }
+
 }

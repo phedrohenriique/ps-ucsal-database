@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.icepear.echarts.Bar;
-
 import app.configuration.AppConstants;
 import app.models.Device;
-import app.models.DeviceDataTimeSeries;
 import app.models.Plant;
 import app.models.PlantInfo;
 import app.services.Database;
@@ -43,6 +40,8 @@ public class PagePlants {
             }
 
             tablePlantList(plantsList);
+
+            Jt.text("Choose Plant - ID to get avaiable Devices").use();
 
             var plantInfoForm = Jt.form().key("plantInfoForm").use();
             String plantInfoId = Jt.textInput("id - plant").key("plantInfoId").use(plantInfoForm);
@@ -87,44 +86,6 @@ public class PagePlants {
             System.out.println(exception.getMessage());
 
         }
-    }
-
-    public void addDeviceDataTimeSeriesHistogram(String deviceId) {
-
-        try {
-
-            Integer id = Integer.valueOf(deviceId);
-            List<DeviceDataTimeSeries> deviceTimeSeries = database.getDeviceDataTimeSeriesList(id);
-
-            System.out.println(deviceTimeSeries.size());
-
-            List<String> deviceTrMin = deviceTimeSeries.stream().map(device -> "").toList();
-            List<Float> deviceTemperature = deviceTimeSeries.stream().map(device -> device.getAvgTemperature()).toList();
-            List<Float> deviceWindSpeed = deviceTimeSeries.stream().map(device -> device.getAvgWindSpeedMs()).toList();
-            List<Float> deviceEnergy = deviceTimeSeries.stream().map(device -> device.getAvgEnergyMw()).toList();
-
-            String[] deviceTrMinArray = deviceTrMin.toArray(new String[0]);
-            Number[] deviceTemperatureArray = deviceTemperature.toArray(new Number[0]);
-            Number[] deviceWindSpeedArray = deviceWindSpeed.toArray(new Number[0]);
-            Number[] deviceEnergyArray = deviceEnergy.toArray(new Number[0]);
-
-            // the series can be clicked
-            // better interaction
-            Bar bar = new Bar()
-                    .setLegend()
-                    .setTooltip("item")
-                    .addXAxis(deviceTrMinArray)
-                    .addYAxis()
-                    .addSeries("temperature", deviceTemperatureArray)
-                    .addSeries("wind_speed_ms", deviceWindSpeedArray)
-                    .addSeries("energy_mw", deviceEnergyArray);
-
-            Jt.echarts(bar).key("chartTemperature").use();
-
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-        }
-
     }
 
     public void tablePlantList(List<Plant> plantList) {
