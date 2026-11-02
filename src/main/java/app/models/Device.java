@@ -52,7 +52,7 @@ public class Device {
         return idPlant;
     }
 
-    public String getNameDevice() {
+    public String getModelDevice() {
         return modelDevice;
     }
 

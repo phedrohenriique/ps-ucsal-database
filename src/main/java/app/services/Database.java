@@ -16,29 +16,39 @@ import app.models.DeviceDataTimeSeries;
 import app.models.DeviceUpdate;
 import app.models.Plant;
 import app.models.PlantCreate;
+import app.models.PlantInfo;
 import app.models.PlantUpdate;
 
 public class Database {
 
     private final Configuration configuration;
 
-    public Database(Configuration configuration) {
+    public Database(Configuration configuration) throws SQLException {
 
         this.configuration = configuration;
+        isDatabaseConnected();
+
     }
 
-    public void accessDatabase() throws SQLException {
+    public void isDatabaseConnected() throws SQLException {
         try (Connection _ = DriverManager.getConnection(
                 this.configuration.getDbUrl(),
                 this.configuration.getDbUser(),
                 this.configuration.getDbPassword()
         )) {
 
-            System.out.println("DATABASE CONNECTION SUCCESSFUL");
+            System.out.println("DATABASE CONNECTION SUCCESS");
+
+        } catch (SQLException exception) {
+
+            System.out.println("DATABASE CONNECTION ERROR");
+            System.out.println(exception.getMessage());
+            throw exception;
+
         }
     }
 
-    public List<Plant> getPlantList()  throws SQLException {
+    public List<Plant> getPlantList() throws SQLException {
 
         List<Plant> listPlant = new ArrayList<>();
         String sql = new DataSQL().getPlantList();
@@ -311,6 +321,42 @@ public class Database {
                     System.out.println("ERROR UPDATE IN TABLE - devices : " + exception.getMessage());
                     throw exception;
                 }
+    }
+
+    public PlantInfo getPlantInfoById(Integer id) throws SQLException {
+
+        PlantInfo plantInfo = null;
+        String sql = new DataSQL().getPlantInfoById();
+
+        try (
+                Connection connection = DriverManager.getConnection(
+                        this.configuration.getDbUrl(),
+                        this.configuration.getDbUser(),
+                        this.configuration.getDbPassword()
+                ); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+                    stmt.setInt(1, id);
+                    stmt.setInt(2, id);
+                    ResultSet result = stmt.executeQuery();
+
+                    if (result.next()) {
+                        plantInfo = new PlantInfo(
+                                result.getInt("id_plant"),
+                                result.getInt("total_devices"),
+                                result.getFloat("max_temperature"),
+                                result.getFloat("max_wind_speed"),
+                                result.getFloat("total_energy")
+                        );
+
+                    }
+
+                } catch (SQLException exception) {
+
+                    System.out.println("ERROR READ IN TABLE - plants : " + exception.getMessage());
+                    throw exception;
+                }
+
+                return plantInfo;
     }
 
 }

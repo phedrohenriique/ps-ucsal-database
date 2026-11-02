@@ -7,16 +7,14 @@ package app;
 // $ java -cp target/classes App
 // to run directly
 // mvn compile exec:java
-
 // mvn clean compile exec:java
 // mvn dependency:tree - check for maven dependencies
 // mvn -f scripts/script-pom.xml clean compile exec:java
-
 import java.sql.SQLException;
 
 import app.configuration.Configuration;
 import app.services.Database;
-import app.services.UI;
+import app.ui.UI;
 import io.javelit.core.Server;
 
 public class App {
@@ -25,20 +23,11 @@ public class App {
 
         System.out.println("STARTING APP");
 
-        Configuration configuration = new Configuration();
-        Database database = new Database(configuration);
-
         try {
 
-            database.accessDatabase();
-            // database.createDatabaseTables();
-            // database.generateDataPlants();
-            // database.generateDataDevices();
-            // List<Plant> listPlant = database.getPlantList();
-            // System.err.println(listPlant);
-
-            // UI interface app
-            UI ui = new UI();
+            Configuration configuration = new Configuration();
+            Database database = new Database(configuration);
+            UI ui = new UI(database);
 
             var server = Server.builder(
                     () -> ui.navigation(),
@@ -49,7 +38,11 @@ public class App {
 
         } catch (SQLException exception) {
 
-            System.err.println("APP ERROR : " + exception.getMessage());
+            System.err.println("ERROR : " + exception.getMessage());
+
+        } catch (Exception exception) {
+
+            System.err.println("ERROR : " + exception.getMessage());
         }
 
     }

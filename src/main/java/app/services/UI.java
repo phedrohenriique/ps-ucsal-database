@@ -12,6 +12,7 @@ import app.models.DeviceDataTimeSeries;
 import app.models.DeviceUpdate;
 import app.models.Plant;
 import app.models.PlantCreate;
+import app.models.PlantInfo;
 import app.models.PlantUpdate;
 import io.javelit.components.layout.TabsComponent.Tabs;
 import io.javelit.core.Jt;
@@ -19,7 +20,11 @@ import io.javelit.core.Jt;
 public class UI {
 
     Configuration configuration = new Configuration();
-    Database database = new Database(configuration);
+    Database database = null;
+
+    public UI(){
+
+    }
 
     public void navigation() {
 
@@ -41,7 +46,7 @@ public class UI {
 
     public void pagePlants() {
 
-        Jt.title("Plants Info").use();
+        Jt.title("Plants - List").use();
 
         try {
 
@@ -56,13 +61,25 @@ public class UI {
 
             Jt.title("Plants - Metrics").use();
 
+            var plantInfoForm = Jt.form().key("plantInfoForm").use();
+            String plantInfoId = Jt.textInput("id - plant").key("plantInfoId").use(plantInfoForm);
+            boolean submmitedPlantInfoForm = Jt.formSubmitButton("Plant - Info").key("submittedPlantInfo")
+                    .use(plantInfoForm);
+
+            if (submmitedPlantInfoForm) {
+                // PlantInfo plantInfo = database.getPlantInfoById(Integer.valueOf(plantInfoId));
+                // System.out.println(plantInfo);
+                // tablePlantInfo(plantInfo);
+                System.out.println(plantInfoId);
+            }
+
             Jt.title("Plants - Device - Data/min").use();
 
             var metricsPlantForm = Jt.form().key("metricsPlantForm").use();
             String metricsPlantId = Jt.textInput("id - plant").key("metricsPlantId").use(metricsPlantForm);
             String metricsDeviceId = Jt.textInput("id - device").key("metricsDeviceId").use(metricsPlantForm);
             boolean submittedMetricsPlantId = Jt.formSubmitButton("get metrics").key("submittedMetricsPlantId")
-                    .use(metricsPlantForm); // add boxes for failure or success
+                    .use(metricsPlantForm);
 
             if (submittedMetricsPlantId) {
 
@@ -209,6 +226,7 @@ public class UI {
             Jt.echarts(bar).key("chartTemperature").use();
 
         } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
 
     }
@@ -390,6 +408,14 @@ public class UI {
             }
 
         }
+    }
+
+    public void tablePlantInfo(PlantInfo plantInfo){
+
+        var tableContainer = Jt.container().key("tablePlantInfo")
+                .use();
+        Jt.table(plantInfo).use(tableContainer);
+
     }
 
     public void tablePlantsList(List<Plant> plantsList) {

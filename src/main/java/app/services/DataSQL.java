@@ -156,4 +156,34 @@ public class DataSQL {
         return sql;
     }
 
+    public String getPlantInfoById() {
+        String sql = """
+
+            WITH device_count AS (
+                SELECT 
+                id_plant,
+                COUNT(*) AS total_devices
+            FROM devices
+            WHERE id_plant=?
+            GROUP BY id_plant
+            )
+            
+            SELECT 
+            plants.id_plant,
+            device_count.total_devices,
+            MAX(temperature) AS max_temperature,
+            MAX(wind_speed_ms) AS max_wind_speed,
+            SUM(energy_mw) AS total_energy
+            FROM data
+            JOIN devices ON devices.id_device=data.id_device
+            JOIN plants ON plants.id_plant=devices.id_plant
+            JOIN device_count ON device_count.id_plant=plants.id_plant
+            WHERE plants.id_plant=?
+            GROUP BY plants.id_plant, device_count.total_devices
+            ORDER BY plants.id_plant ASC;
+        """;
+
+        return sql;
+    }
+
 }
