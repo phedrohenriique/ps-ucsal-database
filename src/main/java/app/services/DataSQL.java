@@ -188,9 +188,19 @@ public class DataSQL {
 
     public String getDeviceInfoById() {
         String sql = """
-            SELECT *
-            FROM devices
-            WHERE id_device=?;
+            WITH device_energy AS (
+                SELECT 
+                id_device,
+                SUM(energy_mw) AS total_energy
+            FROM data
+            WHERE id_device=?
+            GROUP BY id_device
+            )
+            
+            SELECT * 
+            FROM devices 
+            JOIN device_energy ON device_energy.id_device = devices.id_device
+            WHERE devices.id_device=?;
         """;
 
         return sql;

@@ -10,8 +10,8 @@ import java.util.Map;
 
 import org.icepear.echarts.Bar;
 
-import app.models.Device;
 import app.models.DeviceDataTimeSeries;
+import app.models.DeviceInfo;
 import app.services.Database;
 import io.javelit.core.Jt;
 
@@ -42,7 +42,7 @@ public class PageDevices {
 
             try {
 
-                Device deviceInfo = database.getDeviceInfoById(Integer.valueOf(deviceId));
+                DeviceInfo deviceInfo = database.getDeviceInfoById(Integer.valueOf(deviceId));
                 tableDeviceInfo(deviceInfo);
 
                 Jt.text("Device time series information - data below is the average per minute").use();
@@ -94,10 +94,10 @@ public class PageDevices {
 
     }
 
-    public void tableDeviceInfo(Device device) {
+    public void tableDeviceInfo(DeviceInfo device) {
 
         if (device == null) {
-            device = new Device(0, 0, "", "", Timestamp.from(Instant.now()), Device.Status.STOPPED);
+            device = new DeviceInfo(0, 0, "", "", Timestamp.from(Instant.now()), DeviceInfo.Status.STOPPED, 0f);
         }
 
         Map<String, Object> row = new LinkedHashMap<>();
@@ -106,6 +106,7 @@ public class PageDevices {
         row.put("Model", device.getModelDevice());
         row.put("Type", device.getTypeDevice());
         row.put("Status", String.valueOf(device.getStatusDevice()));
+        row.put("Energy MW - Total", String.valueOf(device.getTotalEnergy()));
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         row.put("Deploy Date", formatter.format(device.getCreatedAt()));

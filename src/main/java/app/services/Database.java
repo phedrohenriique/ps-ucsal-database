@@ -13,6 +13,7 @@ import app.configuration.Configuration;
 import app.models.Device;
 import app.models.DeviceCreate;
 import app.models.DeviceDataTimeSeries;
+import app.models.DeviceInfo;
 import app.models.DeviceUpdate;
 import app.models.Plant;
 import app.models.PlantCreate;
@@ -359,9 +360,9 @@ public class Database {
                 return plantInfo;
     }
 
-    public Device getDeviceInfoById(Integer id) throws SQLException {
+    public DeviceInfo getDeviceInfoById(Integer id) throws SQLException {
 
-        Device deviceInfo = null;
+        DeviceInfo deviceInfo = null;
         String sql = new DataSQL().getDeviceInfoById();
 
         try (
@@ -372,16 +373,19 @@ public class Database {
                 ); PreparedStatement stmt = connection.prepareStatement(sql);) {
 
                     stmt.setInt(1, id);
+                    stmt.setInt(2, id);
+
                     ResultSet result = stmt.executeQuery();
 
                     if (result.next()) {
-                        deviceInfo = new Device(
+                        deviceInfo = new DeviceInfo(
                                 result.getInt("id_device"),
                                 result.getInt("id_plant"),
                                 result.getString("model_device"),
                                 result.getString("type_device"),
                                 result.getTimestamp("created_at"),
-                                Device.Status.valueOf(result.getString("status_device"))
+                                DeviceInfo.Status.valueOf(result.getString("status_device")),
+                                result.getFloat("total_energy")
                         );
 
                     }

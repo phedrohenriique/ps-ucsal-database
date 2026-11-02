@@ -66,20 +66,6 @@ public class PagePlants {
 
             }
 
-            // Jt.title("Plants - Device - Data/min").use();
-            // Jt.text("Information on the device data ").use();
-
-            // var metricsPlantForm = Jt.form().key("metricsPlantForm").use();
-            // String metricsDeviceId = Jt.textInput("id - device").key("metricsDeviceId").use(metricsPlantForm);
-            // boolean submittedMetricsPlantId = Jt.formSubmitButton("get metrics").key("submittedMetricsPlantId")
-            //         .use(metricsPlantForm);
-
-            // if (submittedMetricsPlantId) {
-
-            //     addDeviceDataTimeSeriesHistogram(metricsDeviceId);
-            //     // addHistogram(metricsPlantId);
-            // }
-
         } catch (Exception exception) {
 
             Jt.error("ERROR").key(AppConstants.KEY_DEVICE_FORM_DELETE + "tooltip").use();
